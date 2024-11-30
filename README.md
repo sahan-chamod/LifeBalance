@@ -1,17 +1,35 @@
-# life_balance
+# Life Balance  
 
-A new Flutter project.
+## Overview  
+**Life Balance** is a health and wellness app developed using **Flutter** and powered by **Firebase**. It aims to help users track their fitness, nutrition, and overall well-being, promoting a balanced and healthier lifestyle.  
 
-## Getting Started
+---
 
-This project is a starting point for a Flutter application.
+## Team Members  
+- **Lahiru Parasanna**  
+- **Sahan Chamod**  
+- **Ashnaz**  
+- **Supun**  
 
-A few resources to get you started if this is your first Flutter project:
+---
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Features  
+- **Personalized Health Tracking:** Track fitness, sleep, and nutrition effortlessly.  
+- **Real-time Data Sync:** Firebase ensures your data is available across devices.  
+- **Custom Reminders:** Stay on track with tailored notifications for workouts, hydration, or medication.  
+- **Insights and Analytics:** Get a detailed view of your progress.  
+- **Secure and Reliable Storage:** All data is encrypted and stored securely using Firebase.  
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-"# LifeBalance" 
+---
+
+## Tech Stack  
+- **Flutter:** For developing a seamless cross-platform mobile application.  
+- **Firebase:** Backend services including authentication, real-time database, cloud storage, and analytics.  
+
+---
+
+## How to Run the Project  
+1. Clone the repository:  
+   ```bash
+   git clone <repository-url>
+   cd life_balance
