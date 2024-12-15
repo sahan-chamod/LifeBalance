@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:life_balance/routes/routes.dart';
 import 'package:life_balance/utils/app_colors.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -160,8 +161,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                Row(
-                  children: const [
+                const Row(
+                  children: [
                     Expanded(
                       child: Divider(
                         thickness: 1,
@@ -227,7 +228,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       TextButton(
                         onPressed: () {
-                          // Handle sign up navigation
+                          Navigator.pushNamed(context, AppRoutes.signUp);
                         },
                         child: const Text(
                           "Sign Up",
