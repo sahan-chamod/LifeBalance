@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../firebase/signup_helper.dart';
 import '../utils/app_colors.dart';
 
 class SignUp extends StatefulWidget {
@@ -9,7 +10,26 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
+  final FirebaseHelper _firebaseHelper = FirebaseHelper();
+  final _formKey = GlobalKey<FormState>();
+
+  final _fullNameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _mobileNumberController = TextEditingController();
+  final _dobController = TextEditingController();
+
   bool _isPasswordVisible = false;
+
+  @override
+  void dispose() {
+    _fullNameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _mobileNumberController.dispose();
+    _dobController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,57 +47,56 @@ class _SignUpState extends State<SignUp> {
         elevation: 0,
         iconTheme: const IconThemeData(color: AppColors.primaryColor),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: AppColors.primaryColor),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+          icon: const Icon(Icons.arrow_back_ios),
+          onPressed: () => Navigator.pop(context),
         ),
       ),
       body: SingleChildScrollView(
-        // Wrap the Column with SingleChildScrollView
         padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            _buildInputField('Full name', 'Enter your full name'),
-            const SizedBox(height: 16),
-            _buildPasswordField(),
-            const SizedBox(height: 16),
-            _buildInputField('Email', 'example@example.com'),
-            const SizedBox(height: 16),
-            _buildInputField('Mobile Number', '123-456-7890'),
-            const SizedBox(height: 16),
-            _buildInputField('Date Of Birth', 'DD / MM / YYYY'),
-            const SizedBox(height: 24),
-            _buildTermsAndConditions(),
-            const SizedBox(height: 16),
-            _buildSignUpButton(),
-            const SizedBox(height: 16),
-            _buildSocialSignUp(),
-            const SizedBox(height: 16),
-            _buildLoginPrompt(context),
-          ],
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              _buildInputField('Full Name', 'Enter your full name', _fullNameController),
+              const SizedBox(height: 16),
+              _buildPasswordField(),
+              const SizedBox(height: 16),
+              _buildInputField('Email', 'example@example.com', _emailController),
+              const SizedBox(height: 16),
+              _buildInputField('Mobile Number', '123-456-7890', _mobileNumberController),
+              const SizedBox(height: 16),
+              _buildInputField('Date of Birth', 'DD / MM / YYYY', _dobController),
+              const SizedBox(height: 24),
+              _buildTermsAndConditions(),
+              const SizedBox(height: 16),
+              _buildSignUpButton(),
+              const SizedBox(height: 16),
+              _buildSocialSignUp(),
+              const SizedBox(height: 16),
+              _buildLoginPrompt(context),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildInputField(String label, String hint) {
+  Widget _buildInputField(String label, String hint, TextEditingController controller) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           label,
           style: const TextStyle(
-            color: Color.fromARGB(255, 10, 10, 10),
             fontSize: 16,
             fontWeight: FontWeight.w500,
           ),
         ),
         const SizedBox(height: 8),
-        TextField(
+        TextFormField(
+          controller: controller,
           decoration: InputDecoration(
             hintText: hint,
-            hintStyle: const TextStyle(color: AppColors.primaryColor),
             filled: true,
             fillColor: AppColors.inputBackground,
             border: OutlineInputBorder(
@@ -85,6 +104,7 @@ class _SignUpState extends State<SignUp> {
               borderSide: BorderSide.none,
             ),
           ),
+          validator: (value) => value == null || value.isEmpty ? 'This field is required' : null,
         ),
       ],
     );
@@ -97,23 +117,21 @@ class _SignUpState extends State<SignUp> {
         const Text(
           'Password',
           style: TextStyle(
-            color: Color.fromARGB(255, 17, 17, 17),
             fontSize: 16,
             fontWeight: FontWeight.w500,
           ),
         ),
         const SizedBox(height: 8),
-        TextField(
+        TextFormField(
+          controller: _passwordController,
           obscureText: !_isPasswordVisible,
           decoration: InputDecoration(
             hintText: 'Enter your password',
-            hintStyle: const TextStyle(color: AppColors.primaryColor),
             filled: true,
             fillColor: AppColors.inputBackground,
             suffixIcon: IconButton(
               icon: Icon(
                 _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
-                color: AppColors.primaryColor,
               ),
               onPressed: () {
                 setState(() {
@@ -126,6 +144,14 @@ class _SignUpState extends State<SignUp> {
               borderSide: BorderSide.none,
             ),
           ),
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Password is required';
+            } else if (value.length < 6) {
+              return 'Password must be at least 6 characters long';
+            }
+            return null;
+          },
         ),
       ],
     );
@@ -137,19 +163,17 @@ class _SignUpState extends State<SignUp> {
         children: [
           TextSpan(
             text: 'By continuing, you agree to ',
-            style: TextStyle(fontSize: 12, color: AppColors.textColor),
           ),
           TextSpan(
             text: 'Terms of Use',
-            style: TextStyle(fontSize: 12, color: AppColors.primaryColor),
+            style: TextStyle(color: AppColors.primaryColor),
           ),
           TextSpan(
             text: ' and ',
-            style: TextStyle(fontSize: 12, color: AppColors.textColor),
           ),
           TextSpan(
             text: 'Privacy Policy.',
-            style: TextStyle(fontSize: 12, color: AppColors.primaryColor),
+            style: TextStyle(color: AppColors.primaryColor),
           ),
         ],
       ),
@@ -159,7 +183,7 @@ class _SignUpState extends State<SignUp> {
 
   Widget _buildSignUpButton() {
     return ElevatedButton(
-      onPressed: () {},
+      onPressed: _signUp,
       style: ElevatedButton.styleFrom(
         backgroundColor: AppColors.buttonColor,
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 64),
@@ -169,7 +193,7 @@ class _SignUpState extends State<SignUp> {
       ),
       child: const Text(
         'Sign Up',
-        style: TextStyle(color: AppColors.buttonTextColor, fontSize: 16),
+        style: TextStyle(fontSize: 16, color: AppColors.buttonTextColor),
       ),
     );
   }
@@ -177,10 +201,7 @@ class _SignUpState extends State<SignUp> {
   Widget _buildSocialSignUp() {
     return Column(
       children: [
-        const Text(
-          'or sign up with',
-          style: TextStyle(fontSize: 12, color: AppColors.textColor),
-        ),
+        const Text('or sign up with'),
         const SizedBox(height: 8),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -208,23 +229,37 @@ class _SignUpState extends State<SignUp> {
     return Text.rich(
       TextSpan(
         children: [
-          const TextSpan(
-            text: 'Already have an account? ',
-            style: TextStyle(fontSize: 12, color: AppColors.textColor),
-          ),
+          const TextSpan(text: 'Already have an account? '),
           WidgetSpan(
             child: GestureDetector(
-              onTap: () {
-                Navigator.pop(context);
-              },
+              onTap: () => Navigator.pop(context),
               child: const Text(
                 'Log in',
-                style: TextStyle(fontSize: 12, color: AppColors.primaryColor),
+                style: TextStyle(color: AppColors.primaryColor),
               ),
             ),
           ),
         ],
       ),
     );
+  }
+
+  Future<void> _signUp() async {
+    if (_formKey.currentState?.validate() ?? false) {
+      try {
+        await _firebaseHelper.createUser(
+          fullName: _fullNameController.text,
+          email: _emailController.text,
+          password: _passwordController.text,
+          mobileNumber: _mobileNumberController.text,
+          dateOfBirth: _dobController.text,
+        );
+        Navigator.pushReplacementNamed(context, '/home');
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(e.toString())),
+        );
+      }
+    }
   }
 }

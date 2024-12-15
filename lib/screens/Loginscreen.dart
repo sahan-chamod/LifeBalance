@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:life_balance/routes/routes.dart';
 import 'package:life_balance/utils/app_colors.dart';
+import '../firebase/Login_helper.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -12,9 +14,38 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-
-  // Password visibility state
+  final FirebaseService _firebaseService = FirebaseService();
   bool _isPasswordVisible = false;
+
+  Future<void> _login() async {
+    try {
+      User? user = await _firebaseService.loginUser(
+        emailController.text,
+        passwordController.text,
+      );
+
+      if (user != null) {
+        String? userCollection =
+            await _firebaseService.getUserCollection(user.email!);
+
+        if (userCollection == 'users') {
+          Navigator.pushReplacementNamed(context, AppRoutes.home);
+        } else if (userCollection == 'doctors') {
+          Navigator.pushReplacementNamed(context, AppRoutes.doctorHome);
+        } else if (userCollection == 'admin') {
+          Navigator.pushReplacementNamed(context, AppRoutes.adminHome);
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("User not found in any collection.")),
+          );
+        }
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Login failed: ${e.toString()}")),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +58,7 @@ class _LoginScreenState extends State<LoginScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     IconButton(
                       onPressed: () {
@@ -37,17 +69,20 @@ class _LoginScreenState extends State<LoginScreen> {
                         color: AppColors.primaryColor,
                       ),
                     ),
-                    const Spacer(),
+                    Expanded(
+                      child: Center(
+                        child: Text(
+                          "Log In",
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: 28,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
                   ],
-                ),
-                const SizedBox(height: 20),
-                const Text(
-                  "Log In",
-                  style: TextStyle(
-                    color: AppColors.primaryColor,
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                  ),
                 ),
                 const SizedBox(height: 10),
                 const Text(
@@ -60,7 +95,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 const SizedBox(height: 8),
                 const Text(
-                  "Welcome to our application! Log in to access your personalized dashboard and enjoy a seamless experience. Stay connected, secure, and organized with all your essential tools and features at your fingertips.",
+                  "Welcome to our application! Log in to access your personalized dashboard and enjoy a seamless experience.",
                   textAlign: TextAlign.justify,
                   style: TextStyle(
                     fontSize: 14,
@@ -99,7 +134,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(height: 10),
                 TextField(
                   controller: passwordController,
-                  obscureText: !_isPasswordVisible, // Toggle visibility
+                  obscureText: !_isPasswordVisible,
                   decoration: InputDecoration(
                     hintText: "*****",
                     suffixIcon: IconButton(
@@ -128,7 +163,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   alignment: Alignment.centerRight,
                   child: TextButton(
                     onPressed: () {
-                      // Handle forget password
+                      // Handle forgot password functionality
                     },
                     child: const Text(
                       "Forget Password",
@@ -141,9 +176,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 const SizedBox(height: 30),
                 ElevatedButton(
-                  onPressed: () {
-                    // Handle login action
-                  },
+                  onPressed: _login,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primaryColor,
                     minimumSize: const Size(double.infinity, 50),

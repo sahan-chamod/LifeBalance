@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "888275464328",
+    "project_id": "lifebalance-486bf",
+    "storage_bucket": "lifebalance-486bf.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:888275464328:android:70d7aa38224e212bb26f3d",
+        "android_client_info": {
+          "package_name": "com.example.life_balance"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdrZX4x6rW0Rpmof5VAJwq4cXzCIs2TKw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
