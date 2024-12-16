@@ -17,35 +17,41 @@ class FirebaseService {
     }
   }
 
-  // Get the user collection ('users', 'doctors', 'admin') based on the email
   Future<String?> getUserCollection(String email) async {
     try {
-      
-      var userDoc = await _firestore.collection('users').where('email', isEqualTo: email).limit(1).get();
+      var userDoc = await _firestore
+          .collection('users')
+          .where('email', isEqualTo: email)
+          .limit(1)
+          .get();
       if (userDoc.docs.isNotEmpty) {
         return 'users';
       }
 
-     
-      var doctorDoc = await _firestore.collection('doctors').where('email', isEqualTo: email).limit(1).get();
+      var doctorDoc = await _firestore
+          .collection('doctors')
+          .where('email', isEqualTo: email)
+          .limit(1)
+          .get();
       if (doctorDoc.docs.isNotEmpty) {
         return 'doctors';
       }
 
-    
-      var adminDoc = await _firestore.collection('admin').where('email', isEqualTo: email).limit(1).get();
+      var adminDoc = await _firestore
+          .collection('admin')
+          .where('email', isEqualTo: email)
+          .limit(1)
+          .get();
       if (adminDoc.docs.isNotEmpty) {
         return 'admin';
       }
 
-      
       return null;
     } catch (e) {
       throw Exception("Error checking user collection: ${e.toString()}");
     }
   }
 
-  
   Future<void> logoutUser() async {
     await _auth.signOut();
   }
