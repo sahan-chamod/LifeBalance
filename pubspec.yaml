@@ -102,9 +102,3 @@ flutter:
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
 
-flutter:
-  assets:
-    - assets/doctor1.png
-    - assets/doctor2.png
-    - assets/doctor3.png
-    - assets/doctor4.png
