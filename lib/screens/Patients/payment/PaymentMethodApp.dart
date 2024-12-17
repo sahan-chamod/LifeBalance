@@ -52,7 +52,7 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
               value: 'Card',
               onTap: () {
                 // Navigate to AddCardScreen
-                Navigator.pushNamed(context, AppRoutes.addcard);
+                Navigator.pushNamed(context, AppRoutes.addcards);
               },
             ),
             SizedBox(height: 20),

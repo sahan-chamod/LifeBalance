@@ -6,6 +6,8 @@ import '../screens/Signupscreen.dart';
 import '../screens/Patients/HomeScreen.dart';
 import '../screens/admin/AdminHome.dart';
 import '../screens/doctors/DoctorsHome.dart';
+import '../screens/Patients/ChatScreen.dart';
+import '../screens/Patients/NotificationsScreen.dart';
 
 class AppRoutes {
   static const String login = '/login';
@@ -13,8 +15,8 @@ class AppRoutes {
   static const String home = '/home';
   static const String doctorHome = '/doctor_home';
   static const String adminHome = '/admin_home';
-  static const String Payment = '/payment';
-  static const String addcard = '/addcard';
+  static const String Payments = '/payments';
+  static const String addcards = '/addcards';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -28,9 +30,9 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => const DoctorHomeScreen());
       case adminHome:
         return MaterialPageRoute(builder: (_) => const AdminHomeScreen());
-      case Payment:
+      case Payments:
         return MaterialPageRoute(builder: (_) => PaymentMethodScreen());
-      case addcard:
+      case adminHome:
         return MaterialPageRoute(builder: (_) => AddCardScreen());
       default:
         return MaterialPageRoute(builder: (_) => const LoginScreen());
