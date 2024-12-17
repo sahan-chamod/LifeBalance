@@ -28,7 +28,7 @@ class DoctorsScreen extends StatelessWidget {
         title: const Text(
           'Doctors',
           style: TextStyle(
-            color: Colors.blue,
+            color: Color(0xFF2260FF),
             fontSize: 22,
             fontWeight: FontWeight.bold,
           ),
@@ -66,7 +66,7 @@ class DoctorsScreen extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
-                    color: Colors.blue,
+                    color: const Color(0xFF2260FF),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: const Text(
@@ -113,7 +113,7 @@ class DoctorsScreen extends StatelessWidget {
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: Colors.blue,
+        selectedItemColor: const Color(0xFF2260FF),
         unselectedItemColor: Colors.grey,
         currentIndex: 0,
         items: const [
@@ -206,7 +206,7 @@ class DoctorCard extends StatelessWidget {
                     ElevatedButton(
                       onPressed: () {},
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue,
+                        backgroundColor: const Color(0xFF2260FF),
                         padding:
                             const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                         shape: RoundedRectangleBorder(
