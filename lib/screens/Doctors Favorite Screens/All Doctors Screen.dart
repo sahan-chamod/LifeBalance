@@ -36,7 +36,8 @@ class DoctorsScreen extends StatelessWidget {
         leading: const Icon(Icons.arrow_back_ios, color: Colors.black),
         actions: [
           IconButton(
-            icon: const Icon(Icons.search, color: Colors.black),
+            icon: const 
+            Icon(Icons.search, color: Colors.black),
             onPressed: () {},
           ),
           IconButton(
