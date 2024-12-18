@@ -4,8 +4,10 @@ import '../screens/Signupscreen.dart';
 import '../screens/Patients/HomeScreen.dart';
 import '../screens/admin/AdminHome.dart';
 import '../screens/doctors/DoctorsHome.dart';
-import '../screens/Patients/ChatScreen.dart';
-import '../screens/Patients/NotificationsScreen.dart';
+import '../screens/Patients/Chat/ChatScreen.dart';
+import '../screens/Patients/Notifications/NotificationsScreen.dart';
+import '../screens/Patients/Schedule/ScheduleScreen.dart';
+
 
 class AppRoutes {
   static const String login = '/login';
@@ -15,6 +17,8 @@ class AppRoutes {
   static const String adminHome = '/admin_home';
   static const String chat = '/chat';
   static const String notifications = '/notifications';
+  static const String schedule = '/schedule';
+
 
 
 
@@ -34,6 +38,8 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => const Chat());
       case notifications:
         return MaterialPageRoute(builder: (_) => const Notifications());
+      case schedule:
+        return MaterialPageRoute(builder: (_) => const Schedule());
       default:
         return MaterialPageRoute(builder: (_) => const LoginScreen());
     }
