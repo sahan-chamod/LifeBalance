@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../screens/Loginscreen.dart';
+import '../screens/Patients/payment/AddCardScreen.dart';
+import '../screens/Patients/payment/PaymentMethodApp.dart';
 import '../screens/Signupscreen.dart';
 import '../screens/Patients/HomeScreen.dart';
 import '../screens/admin/AdminHome.dart';
@@ -18,8 +20,8 @@ class AppRoutes {
   static const String chat = '/chat';
   static const String notifications = '/notifications';
   static const String schedule = '/schedule';
-
-
+  static const String Payments = '/payments';
+  static const String addcards = '/addcards';
 
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -40,6 +42,10 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => const Notifications());
       case schedule:
         return MaterialPageRoute(builder: (_) => const Schedule());
+      case Payments:
+        return MaterialPageRoute(builder: (_) => PaymentMethodScreen());
+      case adminHome:
+        return MaterialPageRoute(builder: (_) => AddCardScreen());
       default:
         return MaterialPageRoute(builder: (_) => const LoginScreen());
     }
