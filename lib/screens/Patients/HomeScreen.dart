@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:life_balance/routes/routes.dart';
 import '../../utils/app_colors.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -84,7 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             _buildNavBarItem(Icons.home, 0),
             _buildNavBarItem(Icons.chat_bubble_outline, 1),
-            _buildNavBarItem(Icons.person_outline, 2, hasNotification: true),
+            _buildNavBarItem(Icons.person_outline, 2),
             _buildNavBarItem(Icons.calendar_today_outlined, 3),
           ],
         ),
@@ -101,6 +102,13 @@ class _HomeScreenState extends State<HomeScreen> {
         setState(() {
           _currentIndex = index;
         });
+
+        if(index==2){
+          Navigator.pushNamed(context, AppRoutes.profile);
+        }
+        print(index);
+
+
       },
       child: Column(
         mainAxisSize: MainAxisSize.min,

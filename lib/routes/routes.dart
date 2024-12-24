@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:life_balance/screens/profile/CustomerHistoryScreen.dart';
+import 'package:life_balance/screens/profile/PasswordScreen.dart';
+import 'package:life_balance/screens/profile/PrivacyPolicyScreen.dart';
+import 'package:life_balance/screens/profile/UserProfileScreen.dart';
 import '../screens/Loginscreen.dart';
 import '../screens/Signupscreen.dart';
 import '../screens/Patients/HomeScreen.dart';
 import '../screens/admin/AdminHome.dart';
 import '../screens/doctors/DoctorsHome.dart';
+import '../screens/profile/ProfileScreen.dart';
+import '../screens/profile/UserProfileScreen.dart';
+import '../screens/profile/SettingsScreen.dart';
 
 class AppRoutes {
   static const String login = '/login';
@@ -11,6 +18,12 @@ class AppRoutes {
   static const String home = '/home';
   static const String doctorHome = '/doctor_home';
   static const String adminHome = '/admin_home';
+  static const String profile= "/profile";
+  static const String userProfile="/userProfile";
+  static const String userSettings="/settings";
+  static const String password="/password";
+  static const String privacyPolicy="/privacy";
+  static const String customerHistory="/history";
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -24,6 +37,18 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => const DoctorHomeScreen());
       case adminHome:
         return MaterialPageRoute(builder: (_) => const AdminHomeScreen());
+      case profile:
+        return MaterialPageRoute(builder: (_) => const ProfileScreen());
+      case userProfile:
+        return MaterialPageRoute(builder: (_) => const UserProfileScreen());
+      case userSettings:
+        return MaterialPageRoute(builder: (_) => const SettingsScreen());
+      case password:
+        return MaterialPageRoute(builder: (_) => const PasswordScreen());
+      case privacyPolicy:
+        return MaterialPageRoute(builder: (_) => const PrivacyPolicyScreen());
+      case customerHistory:
+        return MaterialPageRoute(builder: (_) => const CustomerHistoryScreen());
       default:
         return MaterialPageRoute(builder: (_) => const LoginScreen());
     }
