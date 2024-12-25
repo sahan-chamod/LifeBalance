@@ -110,6 +110,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
                     _passwordField("Confirm New Password", _confirmPassword),
                     const SizedBox(height:40),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Expanded( child:ElevatedButton(
                          onPressed: () {
@@ -118,7 +119,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.primaryColor,
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
+                              borderRadius: BorderRadius.circular(20),
                             ),
 
                           ),

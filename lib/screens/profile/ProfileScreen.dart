@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:life_balance/firebase/Login_helper.dart';
 import 'dart:io';
 import 'package:provider/provider.dart';
 import 'package:life_balance/routes/routes.dart';
@@ -14,6 +15,7 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  final FirebaseService _firebaseService = FirebaseService();
   late UserProvider userProvider;
   File? file;
   String? name;
@@ -42,44 +44,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
-  void _showLogoutDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text(
-            'Logout',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Colors.blue,
-            ),
-          ),
-          content: const Text('Are you sure you want to log out?'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
-              },
-              child: const Text(
-                'Cancel',
-                style: TextStyle(color: Colors.blue),
-              ),
-            ),
-            TextButton(
-              onPressed: () {
-                // Perform logout logic here
-                Navigator.of(context).pop(); // Close the dialog
-                Navigator.of(context).pushReplacementNamed('/login'); // Redirect to login
-              },
-              child: const Text(
-                'Yes, Logout',
-                style: TextStyle(color: Colors.red),
-              ),
-            ),
-          ],
-        );
-      },
-    );
+
+
+  Future <void> logout()async{
+    await _firebaseService.logoutUser();
   }
 
   @override
@@ -182,7 +150,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       title: 'Help',
                       route: AppRoutes.userSettings,
                     ),
-                    _logOut(_showLogoutDialog,context)
+                    _logOut(context,)
                   ],
                 ),
               ],
@@ -190,8 +158,162 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
         ),
       ),
+      bottomNavigationBar: Container(
+        margin: const EdgeInsets.all(12),
+        height: 70,
+        decoration: BoxDecoration(
+          color: AppColors.primaryColor,
+          borderRadius: BorderRadius.circular(30),
+          boxShadow: const [
+            BoxShadow(
+              color: Colors.black12,
+              spreadRadius: 1,
+              blurRadius: 8,
+              offset: Offset(0, 3),
+            )
+          ],
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            _buildNavBarItem(Icons.home, 0),
+            _buildNavBarItem(Icons.chat_bubble_outline, 1),
+            _buildNavBarItem(Icons.person_outline, 2),
+            _buildNavBarItem(Icons.calendar_today_outlined, 3),
+          ],
+        ),
+      ),
     );
   }
+
+  Widget _buildNavBarItem(IconData icon, int index,
+      {bool hasNotification = false}) {
+    return GestureDetector(
+      onTap: () {
+        if(index!=2){
+          Navigator.pushNamed(context, AppRoutes.profile);
+        }
+
+      },
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Stack(
+            children: [
+              Icon(
+                icon,
+                size: 30,
+                color: index==2 ? Colors.white : Colors.white70,
+              ),
+              if (hasNotification)
+                Positioned(
+                  top: 0,
+                  right: 0,
+                  child: Container(
+                    width: 8,
+                    height: 8,
+                    decoration: const BoxDecoration(
+                      color: Colors.red,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _logOut(BuildContext context) {
+    return ListTile(
+      leading: Container(
+        padding: const EdgeInsets.all(10),
+        decoration: const BoxDecoration(
+          color: Color(0xFFCAD6FF),
+          shape: BoxShape.circle,
+        ),
+        child: Icon(
+          Icons.logout,
+          color: AppColors.primaryColor,
+          size: 24,
+        ),
+      ),
+      title: const Text(
+        "LogOut",
+        style: TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.w400,
+        ),
+      ),
+      trailing: const Icon(
+        Icons.arrow_forward_ios,
+        color: Colors.blueGrey,
+        size: 18,
+      ),
+      onTap: () {
+        showModalBottomSheet(
+          context: context,
+            barrierColor: Colors.blue.withOpacity(0.5),
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          builder: (BuildContext context) {
+            return Container(
+              padding: const EdgeInsets.all(20),
+              height: 200,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text("Logout",style: TextStyle(color:  AppColors.primaryColor,fontSize: 25,fontWeight: FontWeight.bold),),
+                  SizedBox(height: 20,),
+                  const Text(
+                    'Are you sure you want to log out?',
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Expanded(child:    ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor:const Color(0xFFCAD6FF),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 10),
+                        ),
+                        child: const Text('Cancel',style: TextStyle(color: AppColors.primaryColor,),),
+                      )) ,
+                      SizedBox(width: 20,),
+                      Expanded(child: ElevatedButton(
+                        onPressed: ()async {
+                        await  logout();
+                          Navigator.of(context).pop();
+                          Navigator.of(context).pushNamed(AppRoutes.login);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor:  AppColors.primaryColor,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 10),
+                        ),
+                        child: const Text('Yes, Logout',style: TextStyle(color: Colors.white),),
+                      ),)
+                    ],
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
 }
 
 class CustomListTile extends StatelessWidget {
@@ -280,35 +402,4 @@ Widget _profilePhoto(File? file, Function addNewProImage) {
   );
 }
 
-Widget _logOut(logOutAction,BuildContext context){
-  return ListTile(
-    leading: Container(
-      padding: const EdgeInsets.all(10),
-      decoration: const BoxDecoration(
-        color: Color(0xFFCAD6FF),
-        shape: BoxShape.circle,
-      ),
-      child: Icon(
-        Icons.logout,
-        color: AppColors.primaryColor,
-        size: 24,
-      ),
-    ),
-    title: Text(
-      "LogOut",
-      style: const TextStyle(
-        fontSize: 18,
-        fontWeight: FontWeight.w400,
-      ),
-    ),
-    trailing: const Icon(
-      Icons.arrow_forward_ios,
-      color: Colors.blueGrey,
-      size: 18,
-    ),
-    onTap: () {
-      logOutAction();
-    },
-  )
-  ;
-}
+

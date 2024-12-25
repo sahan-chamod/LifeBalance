@@ -149,28 +149,28 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 ),
                 const SizedBox(height: 40.0,),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Expanded(
-                      child:  ElevatedButton(
-                          onPressed: (){
-                            updateUserDetails();
-                          },
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor: Color(0xFF225FFF),
-                              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30),
-                              )
+                    ElevatedButton(
+                        onPressed: (){
+                          updateUserDetails();
+                        },
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Color(0xFF225FFF),
+                            padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            )
+                        ),
+                        child:const Text(
+                          "Update Profile",
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w500,
                           ),
-                          child:const Text(
-                            "Update Profile",
-                            style: TextStyle(
-                              fontSize: 18,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          )),
-                    )
+                        )),
                    ],
                 )
               ],
