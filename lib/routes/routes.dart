@@ -8,6 +8,8 @@ import 'package:life_balance/screens/profile/PrivacyPolicyScreen.dart';
 import 'package:life_balance/screens/profile/UserProfileScreen.dart';
 import 'package:life_balance/screens/profile/addFoodAllergiesScreen.dart';
 import '../screens/Loginscreen.dart';
+import '../screens/Patients/payment/AddCardScreen.dart';
+import '../screens/Patients/payment/PaymentMethodApp.dart';
 import '../screens/Signupscreen.dart';
 import '../screens/Patients/HomeScreen.dart';
 import '../screens/admin/AdminHome.dart';
@@ -15,6 +17,11 @@ import '../screens/doctors/DoctorsHome.dart';
 import '../screens/profile/ProfileScreen.dart';
 import '../screens/profile/UserProfileScreen.dart';
 import '../screens/profile/SettingsScreen.dart';
+import '../screens/Patients/Chat/ChatScreen.dart';
+import '../screens/Patients/Notifications/NotificationsScreen.dart';
+import '../screens/Patients/Schedule/ScheduleScreen.dart';
+
+
 
 class AppRoutes {
   static const String login = '/login';
@@ -32,7 +39,11 @@ class AppRoutes {
   static const String addMediAlegic="/addMedAligic";
   static const String foodAllergy="/foodAllergy";
   static const String addFoodAllergy="/addFoodAllergy";
-
+  static const String chat = '/chat';
+  static const String notifications = '/notifications';
+  static const String schedule = '/schedule';
+  static const String Payments = '/payments';
+  static const String addcards = '/addcards';
 
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -67,6 +78,16 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => const FoodAllergyScreen());
       case addFoodAllergy:
         return MaterialPageRoute(builder: (_) => const AddFoodAllergiesScreen());
+      case chat:
+        return MaterialPageRoute(builder: (_) => const Chat());
+      case notifications:
+        return MaterialPageRoute(builder: (_) => const Notifications());
+      case schedule:
+        return MaterialPageRoute(builder: (_) => const Schedule());
+      case Payments:
+        return MaterialPageRoute(builder: (_) => PaymentMethodScreen());
+      case adminHome:
+        return MaterialPageRoute(builder: (_) => AddCardScreen());
       default:
         return MaterialPageRoute(builder: (_) => const LoginScreen());
     }
