@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:life_balance/provider/user.proivder.dart';
 import 'package:life_balance/routes/routes.dart';
 import 'package:life_balance/utils/app_colors.dart';
 import '../firebase/Login_helper.dart';
+import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -17,7 +19,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final FirebaseService _firebaseService = FirebaseService();
   bool _isPasswordVisible = false;
 
-  Future<void> _login() async {
+  Future<void> _login(BuildContext context) async {
     try {
       User? user = await _firebaseService.loginUser(
         emailController.text,
@@ -26,8 +28,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
       if (user != null) {
         String? userCollection =
-            await _firebaseService.getUserCollection(user.email!);
-
+        await _firebaseService.getUserCollection(user.email!);
         if (userCollection == 'users') {
           Navigator.pushReplacementNamed(context, AppRoutes.home);
         } else if (userCollection == 'doctors') {
@@ -49,6 +50,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -176,7 +179,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 const SizedBox(height: 30),
                 ElevatedButton(
-                  onPressed: _login,
+                  onPressed: () => _login(context),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primaryColor,
                     minimumSize: const Size(double.infinity, 50),

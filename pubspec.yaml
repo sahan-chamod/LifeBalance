@@ -41,6 +41,10 @@ dependencies:
   intl: ^0.20.1
   email_validator: ^3.0.0
   flutter_secure_storage: ^9.2.2
+  provider: ^6.1.2
+  image_picker: ^1.0.0
+  firebase_storage: ^12.3.7
+  sqflite: ^2.4.0
 
 dev_dependencies:
   flutter_test:

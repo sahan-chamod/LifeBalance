@@ -27,6 +27,7 @@ class FirebaseHelper {
         'dateOfBirth': dateOfBirth,
         'createdAt': Timestamp.now(),
       });
+
     } on FirebaseAuthException catch (e) {
       if (e.code == 'email-already-in-use') {
         throw 'The email address is already in use.';

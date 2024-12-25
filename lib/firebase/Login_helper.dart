@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+
 class FirebaseService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -11,6 +12,7 @@ class FirebaseService {
         email: email,
         password: password,
       );
+
       return userCredential.user;
     } catch (e) {
       throw Exception("Login failed: ${e.toString()}");

@@ -1,6 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:life_balance/provider/user.proivder.dart';
 import 'package:life_balance/routes/routes.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,11 +17,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: 'Life Balance',
-      initialRoute: AppRoutes.login,
-      onGenerateRoute: AppRoutes.generateRoute,
-      debugShowCheckedModeBanner: false,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => UserProvider()),
+      ],
+      child: const MaterialApp(
+        title: 'Life Balance',
+        initialRoute: AppRoutes.login,
+        onGenerateRoute: AppRoutes.generateRoute,
+        debugShowCheckedModeBanner: false,
+      ),
     );
   }
 }
