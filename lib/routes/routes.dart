@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:life_balance/screens/profile/AddMediAlegic.dart';
 import 'package:life_balance/screens/profile/CustomerHistoryScreen.dart';
+import 'package:life_balance/screens/profile/FoodAllergyScreen.dart';
+import 'package:life_balance/screens/profile/MediAlegicScreen.dart';
 import 'package:life_balance/screens/profile/PasswordScreen.dart';
 import 'package:life_balance/screens/profile/PrivacyPolicyScreen.dart';
 import 'package:life_balance/screens/profile/UserProfileScreen.dart';
+import 'package:life_balance/screens/profile/addFoodAllergiesScreen.dart';
 import '../screens/Loginscreen.dart';
 import '../screens/Signupscreen.dart';
 import '../screens/Patients/HomeScreen.dart';
@@ -24,6 +28,12 @@ class AppRoutes {
   static const String password="/password";
   static const String privacyPolicy="/privacy";
   static const String customerHistory="/history";
+  static const String mediAlegic="/mediAlegic";
+  static const String addMediAlegic="/addMedAligic";
+  static const String foodAllergy="/foodAllergy";
+  static const String addFoodAllergy="/addFoodAllergy";
+
+
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -49,6 +59,14 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => const PrivacyPolicyScreen());
       case customerHistory:
         return MaterialPageRoute(builder: (_) => const CustomerHistoryScreen());
+      case mediAlegic:
+        return MaterialPageRoute(builder: (_) => const MediAlegicScreen());
+      case addMediAlegic:
+        return MaterialPageRoute(builder: (_) => const AddMediAlegic());
+      case foodAllergy:
+        return MaterialPageRoute(builder: (_) => const FoodAllergyScreen());
+      case addFoodAllergy:
+        return MaterialPageRoute(builder: (_) => const AddFoodAllergiesScreen());
       default:
         return MaterialPageRoute(builder: (_) => const LoginScreen());
     }

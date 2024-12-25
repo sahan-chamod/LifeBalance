@@ -1,7 +1,8 @@
+import 'package:life_balance/db/allergicModel.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
-class DatabaseHelper{
+class DatabaseHelper {
   static final DatabaseHelper _instance = DatabaseHelper._internal();
   factory DatabaseHelper() => _instance;
 
@@ -24,16 +25,75 @@ class DatabaseHelper{
     );
   }
 
-  Future _onCreate(Database db, int version) async {
+  Future<void> _onCreate(Database db, int version) async {
     await db.execute('''
-      CREATE TABLE medicalalegic (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      title TEXT NOT NULL,
-      description TEXT,
-      created TEXT NOT NULL,
+      CREATE TABLE medicalAllergic (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        title TEXT NOT NULL,
+        description TEXT,
+        created TEXT NOT NULL
       )
-      ''');
+    ''');
+
+    await db.execute('''
+      CREATE TABLE foodAllergic (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        title TEXT NOT NULL,
+        description TEXT,
+        created TEXT NOT NULL
+      )
+    ''');
   }
 
+  Future<void> insertMedicalAllergic(Allergic allergic) async {
+    final db = await database;
+    await db.insert(
+      "medicalAllergic",
+      {
+        "title": allergic.title,
+        "description": allergic.description,
+        "created": allergic.created.toIso8601String(),
+      },
+      conflictAlgorithm: ConflictAlgorithm.replace, // Handle conflicts
+    );
+  }
 
+  Future<void> insertFoodAllergy(Allergic allergic) async {
+    final db = await database;
+    await db.insert(
+      "foodAllergic",
+      {
+        "title": allergic.title,
+        "description": allergic.description,
+        "created": allergic.created.toIso8601String(),
+      },
+      conflictAlgorithm: ConflictAlgorithm.replace, // Handle conflicts
+    );
+  }
+
+  Future<List<Allergic>> getMedicalAllergic() async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db.query("medicalAllergic");
+
+    return maps.map((map) {
+      return Allergic(
+        title: map['title'] as String,
+        description: map['description'] as String,
+        created: DateTime.parse(map['created'] as String),
+      );
+    }).toList();
+  }
+
+  Future<List<Allergic>> getFoodAllergies() async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db.query("foodAllergic");
+
+    return maps.map((map) {
+      return Allergic(
+        title: map['title'] as String,
+        description: map['description'] as String,
+        created: DateTime.parse(map['created'] as String),
+      );
+    }).toList();
+  }
 }

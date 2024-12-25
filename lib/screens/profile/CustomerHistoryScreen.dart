@@ -58,13 +58,13 @@ class _SettingsScreenState extends State<CustomerHistoryScreen> {
                       ),
                       CustomListTitle(
                         icon: Icons.heart_broken,
-                        title: 'Medi-Alegic',
-                        route: AppRoutes.password,
+                        title: 'Medi-Allergies',
+                        route: AppRoutes.mediAlegic,
                       ),
                       CustomListTitle(
                         icon: Icons.food_bank,
-                        title: 'Food-Alegic',
-                        route: AppRoutes.password,
+                        title: 'Food-Allergies',
+                        route: AppRoutes.foodAllergy,
                       ),
                     ],
                   )
