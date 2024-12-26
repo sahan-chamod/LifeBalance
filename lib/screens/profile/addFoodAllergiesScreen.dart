@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:life_balance/controllers/foodAllergyController.dart';
 import 'package:life_balance/db/allergicModel.dart';
+import 'package:life_balance/routes/routes.dart';
 import 'package:life_balance/utils/app_colors.dart';
 
 class AddFoodAllergiesScreen extends StatefulWidget {
@@ -28,7 +29,30 @@ class _AddFoodAllergiesScreenState extends State<AddFoodAllergiesScreen> {
         title: _titleController.text,
         description: _descriptionController.text,
         created: DateTime.now());
-    _controller.insertNewAllergy(allergic);
+    try{
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Food allergy added successfully",style: TextStyle(
+              fontSize:20.0
+          ),),
+          backgroundColor: Colors.green,
+          duration: Duration(seconds: 4),
+        ),
+      );
+      _controller.insertNewAllergy(allergic);
+      Navigator.pop(context);
+    }catch(e){
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("something went wrong!",style: TextStyle(
+              fontSize:20.0
+          ),),
+          backgroundColor: Colors.green,
+          duration: Duration(seconds: 2), // Adjust duration as needed
+        ),
+      );
+    }
+
   }
 
   @override
@@ -97,6 +121,7 @@ class _AddFoodAllergiesScreenState extends State<AddFoodAllergiesScreen> {
           ],
         ),
       )),
+
     );
   }
 }

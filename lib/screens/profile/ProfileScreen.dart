@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:life_balance/firebase/Login_helper.dart';
+import 'package:life_balance/firebase/user_helper.dart';
 import 'dart:io';
 import 'package:provider/provider.dart';
 import 'package:life_balance/routes/routes.dart';
@@ -28,9 +29,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
     if (userProvider.user?.displayName != null) {
       name = userProvider.user?.displayName ?? "";
     }
-    if (userProvider.profileImage.isNotEmpty) {
-      file = File(userProvider.profileImage);
+
+    if (userProvider.user != null) {
+      print(userProvider.profileImage);
+      _loadImage(userProvider.profileImage);
     }
+
   }
 
   Future<void> addNewProImage() async {
@@ -44,10 +48,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
-
-
   Future <void> logout()async{
     await _firebaseService.logoutUser();
+  }
+
+  Future<void> _loadImage(String? url) async {
+    final filePath = '$url';
+    final imageFile = await fetchImage(filePath);
+    setState(() {
+      file=imageFile;
+    });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _loadImage(userProvider.profileImage);
   }
 
   @override
@@ -87,18 +103,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ],
                 ),
-                Column(
+                Row(
                   children: [
-                    Consumer<UserProvider>(
-                      builder: (context, provider, _) {
-                        return _profilePhoto(
-                          provider.profileImage.isNotEmpty
-                              ? File(provider.profileImage)
-                              : null,
-                          addNewProImage,
-                        );
-                      },
-                    ),
+                    Expanded(child: _profilePhoto(file,addNewProImage))
                   ],
                 ),
                 const SizedBox(height: 15),
@@ -117,17 +124,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 5),
+                const SizedBox(height: 25),
                 Column(
                   children: [
                     CustomListTile(
                       icon: Icons.person_outline,
                       title: 'Profile',
-                      route: AppRoutes.userProfile,
-                    ),
-                    CustomListTile(
-                      icon: Icons.favorite,
-                      title: 'Favorite',
                       route: AppRoutes.userProfile,
                     ),
                     CustomListTile(
@@ -190,7 +192,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
       {bool hasNotification = false}) {
     return GestureDetector(
       onTap: () {
-        if(index!=2){
+        if(index==0){
+          Navigator.pushNamed(context, AppRoutes.home);
+        }
+        if(index==2){
           Navigator.pushNamed(context, AppRoutes.profile);
         }
 
@@ -379,24 +384,7 @@ Widget _profilePhoto(File? file, Function addNewProImage) {
           )
               : null,
         ),
-        Positioned(
-          bottom: 0,
-          right: 0,
-          child: InkWell(
-            onTap: () {
-              addNewProImage();
-            },
-            child: const CircleAvatar(
-              radius: 20,
-              backgroundColor: Colors.blue,
-              child: Icon(
-                Icons.edit,
-                color: Colors.white,
-                size: 20,
-              ),
-            ),
-          ),
-        ),
+
       ],
     ),
   );

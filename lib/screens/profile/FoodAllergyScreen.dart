@@ -38,7 +38,7 @@ class _FoodAllergyScreenState extends State<FoodAllergyScreen> {
           child: Padding(
               padding: EdgeInsets.all(20),
                   child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -68,19 +68,6 @@ class _FoodAllergyScreenState extends State<FoodAllergyScreen> {
                           const SizedBox(width: 48), // Spacer to balance alignment
                         ],
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          IconButton(
-                            onPressed: () {
-                              Navigator.pushNamed(context, AppRoutes.addFoodAllergy);
-                            },
-                            icon: const Icon(
-                              Icons.add,
-                              color: AppColors.primaryColor,
-                            ),
-                          )
-                        ],),
                       const SizedBox(height: 20),
                       Expanded(
                         child: ListView(
@@ -92,6 +79,17 @@ class _FoodAllergyScreenState extends State<FoodAllergyScreen> {
                     ],
           ),
           )),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: (){
+          Navigator.pushNamed(context, AppRoutes.addFoodAllergy);
+        },
+        icon: const Icon(Icons.add, color: Colors.white),
+        label: const Text(
+          "Add New",
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: AppColors.primaryColor,
+      ),
     );
   }
 }
@@ -105,14 +103,15 @@ Widget _alegi(Allergic allergic) {
         style: TextStyle(
           color: AppColors.primaryColor,
           fontWeight: FontWeight.bold,
+            fontSize: 19.0
         ),
       ),
       const SizedBox(height: 20),
       Text(
         allergic.description,
         style: TextStyle(
-          color: AppColors.primaryColor,
-          fontWeight: FontWeight.bold,
+          color: Colors.grey,
+          fontWeight: FontWeight.normal,
         ),
       ),
       const SizedBox(height: 30),

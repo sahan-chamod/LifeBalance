@@ -25,7 +25,6 @@ class _MediAlegicScreenState extends State<MediAlegicScreen> {
 
   Future<void> refreshItems() async {
     List<Allergic>datas=await _controller.fetchAllergies();
-    print(datas);
     setState(() {
       data = datas;
     });
@@ -68,19 +67,6 @@ class _MediAlegicScreenState extends State<MediAlegicScreen> {
                   const SizedBox(width: 48), // Spacer to balance alignment
                 ],
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, AppRoutes.addMediAlegic);
-                    },
-                    icon: const Icon(
-                      Icons.add,
-                      color: AppColors.primaryColor,
-                    ),
-                  )
-              ],),
               const SizedBox(height: 20),
               Expanded(
                 child: ListView(
@@ -93,6 +79,18 @@ class _MediAlegicScreenState extends State<MediAlegicScreen> {
           ),
         ),
       ),
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed: (){
+            Navigator.pushNamed(context, AppRoutes.addMediAlegic);
+          },
+          icon: const Icon(Icons.add, color: Colors.white),
+          label: const Text(
+            "Add New",
+            style: TextStyle(color: Colors.white),
+          ),
+          backgroundColor: AppColors.primaryColor,
+        ),
+
     );
   }
 }
@@ -106,13 +104,14 @@ Widget _alegi(Allergic allergic) {
         style: TextStyle(
           color: AppColors.primaryColor,
           fontWeight: FontWeight.bold,
+          fontSize: 19.0
         ),
       ),
       const SizedBox(height: 20),
       Text(
         allergic.description,
         style: TextStyle(
-          color: AppColors.primaryColor,
+          color: Colors.grey,
           fontWeight: FontWeight.bold,
         ),
       ),

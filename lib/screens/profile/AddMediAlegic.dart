@@ -16,7 +16,7 @@ class _AddMediAlegicState extends State<AddMediAlegic> {
   final TextEditingController _descriptionController=TextEditingController();
   final _databaseHelper= DatabaseHelper();
 
-  Future<void> addAllergic()async{
+  Future<void> addAllergic(BuildContext context)async{
     if(_titleController.text.isEmpty){
       return null;
     }
@@ -25,11 +25,34 @@ class _AddMediAlegicState extends State<AddMediAlegic> {
       return null;
     }
 
-    final allergic=Allergic(
-        title: _titleController.text,
-        description: _descriptionController.text,
-        created: DateTime.now());
-    _databaseHelper.insertMedicalAllergic(allergic);
+    try{
+      final allergic=Allergic(
+          title: _titleController.text,
+          description: _descriptionController.text,
+          created: DateTime.now());
+      _databaseHelper.insertMedicalAllergic(allergic);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Medical allergy added successfully",style: TextStyle(
+              fontSize:20.0
+          ),),
+          backgroundColor: Colors.green,
+          duration: Duration(seconds: 4),
+        ),
+      );
+      Navigator.pop(context);
+    }catch(e){
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("something went wrong!",style: TextStyle(
+              fontSize:20.0
+          ),),
+          backgroundColor: Colors.green,
+          duration: Duration(seconds: 2), // Adjust duration as needed
+        ),
+      );
+    }
+
   }
 
   @override
@@ -78,7 +101,7 @@ class _AddMediAlegicState extends State<AddMediAlegic> {
               mainAxisAlignment: MainAxisAlignment.center, children: [
               ElevatedButton(
                   onPressed: (){
-                    addAllergic();
+                    addAllergic(context);
                   },
                   style: ElevatedButton.styleFrom(
                       backgroundColor: Color(0xFF225FFF),

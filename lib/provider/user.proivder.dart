@@ -60,13 +60,18 @@ class UserProvider with ChangeNotifier {
   Future<void>updateProfileImage(String path)async{
     final userRef = FirebaseFirestore.instance.collection('users').doc(_user?.uid);
     DocumentSnapshot docSnapshot = await userRef.get();
-
     if(docSnapshot.exists){
       await userRef.set({
         'profileImage': path,
       }, SetOptions(merge: true));
     }
   }
+
+
+
+
+
+
 
 
 
