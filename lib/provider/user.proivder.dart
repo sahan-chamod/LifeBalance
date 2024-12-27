@@ -10,8 +10,6 @@ class UserProvider with ChangeNotifier {
 
   User? get user => _user;
 
-
-
   Future<void> updateUser(String newDisplayName, String phoneNumber, String dob,BuildContext context) async {
     try {
       final userRef = FirebaseFirestore.instance.collection('users').doc(_user?.uid);
@@ -66,15 +64,5 @@ class UserProvider with ChangeNotifier {
       }, SetOptions(merge: true));
     }
   }
-
-
-
-
-
-
-
-
-
-
 
 }

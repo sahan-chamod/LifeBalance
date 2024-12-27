@@ -111,7 +111,6 @@ Future<File?> fetchImage(String filePath) async {
   }
 }
 
-
 Future<List<ReportsModel>> fetchAllDocs()async{
   try{
     CollectionReference reports = FirebaseFirestore.instance.collection('reports');

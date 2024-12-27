@@ -147,11 +147,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       title: 'Settings',
                       route: AppRoutes.userSettings,
                     ),
-                    CustomListTile(
-                      icon: Icons.help,
-                      title: 'Help',
-                      route: AppRoutes.userSettings,
-                    ),
                     _logOut(context,)
                   ],
                 ),
