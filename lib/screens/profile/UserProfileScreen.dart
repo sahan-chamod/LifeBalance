@@ -115,7 +115,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     Expanded(
                       child: Center(
                         child: Text(
-                          "User Profile",
+                          "Profile",
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                             color: AppColors.primaryColor,
@@ -125,6 +125,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                         ),
                       ),
                     ),
+                    SizedBox(width: 35.0,)
                   ],
                 ),
                 const SizedBox(height: 20,),
