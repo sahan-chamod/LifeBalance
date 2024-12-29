@@ -30,6 +30,19 @@ class _FoodAllergyScreenState extends State<FoodAllergyScreen> {
     });
   }
 
+  Future<void> delete(int id)async{
+    await _controller.delete(id);
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text("Record deleted successfully",style: TextStyle(
+            fontSize:20.0
+        ),),
+        backgroundColor: Colors.red,
+        duration: Duration(seconds: 4),
+      ),
+    );
+    refreshItems();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,16 +85,20 @@ class _FoodAllergyScreenState extends State<FoodAllergyScreen> {
                       Expanded(
                         child: ListView(
                           children: [
-                            ...data.map((toElement)=>_alegi(toElement))
+                            ...data.map((toElement)=>_alegi(toElement,delete))
                           ],
                         ),
                       ),
                     ],
           ),
           )),
+
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: (){
-          Navigator.pushNamed(context, AppRoutes.addFoodAllergy);
+        onPressed: () async {
+          final result = await Navigator.pushNamed(context, AppRoutes.addFoodAllergy);
+          if (result == true) {
+            refreshItems();
+          }
         },
         icon: const Icon(Icons.add, color: Colors.white),
         label: const Text(
@@ -94,17 +111,26 @@ class _FoodAllergyScreenState extends State<FoodAllergyScreen> {
   }
 }
 
-Widget _alegi(Allergic allergic) {
+Widget _alegi(Allergic allergic,delete) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      Text(
-        allergic.title,
-        style: TextStyle(
-          color: AppColors.primaryColor,
-          fontWeight: FontWeight.bold,
-            fontSize: 19.0
-        ),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            allergic.title,
+            style: TextStyle(
+                color: AppColors.primaryColor,
+                fontWeight: FontWeight.bold,
+                fontSize: 19.0
+            ),
+          ),
+          TextButton(onPressed: ()async{
+            print(allergic.toMap());
+            await  delete(allergic.id);
+          }, child: Icon(Icons.delete,color: Colors.red,))
+        ],
       ),
       const SizedBox(height: 20),
       Text(

@@ -16,11 +16,7 @@ class _MediAlegicScreenState extends State<MediAlegicScreen> {
   final MedicalAllergyController _controller= MedicalAllergyController();
   List<Allergic> data=[];
 
-  @override
-  void initState() {
-    refreshItems();
-    super.initState();
-  }
+
 
 
   Future<void> refreshItems() async {
@@ -28,6 +24,26 @@ class _MediAlegicScreenState extends State<MediAlegicScreen> {
     setState(() {
       data = datas;
     });
+  }
+
+  Future<void> delete(int id)async{
+    await _controller.delete(id);
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text("Record deleted successfully",style: TextStyle(
+            fontSize:20.0
+        ),),
+        backgroundColor: Colors.red,
+        duration: Duration(seconds: 4),
+      ),
+    );
+    refreshItems();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    refreshItems();
   }
 
   @override
@@ -64,14 +80,14 @@ class _MediAlegicScreenState extends State<MediAlegicScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 48), // Spacer to balance alignment
+                  const SizedBox(width: 48),
                 ],
               ),
               const SizedBox(height: 20),
               Expanded(
                 child: ListView(
                   children: [
-                    ...data.map((toElement)=>_alegi(toElement))
+                    ...data.map((toElement)=>_alegi(toElement,delete))
                   ],
                 ),
               ),
@@ -80,8 +96,11 @@ class _MediAlegicScreenState extends State<MediAlegicScreen> {
         ),
       ),
         floatingActionButton: FloatingActionButton.extended(
-          onPressed: (){
-            Navigator.pushNamed(context, AppRoutes.addMediAlegic);
+          onPressed: () async {
+            final result = await Navigator.pushNamed(context, AppRoutes.addMediAlegic);
+            if (result == true) {
+              refreshItems();
+            }
           },
           icon: const Icon(Icons.add, color: Colors.white),
           label: const Text(
@@ -95,17 +114,26 @@ class _MediAlegicScreenState extends State<MediAlegicScreen> {
   }
 }
 
-Widget _alegi(Allergic allergic) {
+Widget _alegi(Allergic allergic,delete) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      Text(
-        allergic.title,
-        style: TextStyle(
-          color: AppColors.primaryColor,
-          fontWeight: FontWeight.bold,
-          fontSize: 19.0
-        ),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            allergic.title,
+            style: TextStyle(
+                color: AppColors.primaryColor,
+                fontWeight: FontWeight.bold,
+                fontSize: 19.0
+            ),
+          ),
+          TextButton(onPressed: ()async{
+            print(allergic.toMap());
+            await  delete(allergic.id);
+          }, child: Icon(Icons.delete,color: Colors.red,))
+        ],
       ),
       const SizedBox(height: 20),
       Text(

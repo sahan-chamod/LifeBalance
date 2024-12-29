@@ -11,7 +11,6 @@ class AddMediAlegic extends StatefulWidget {
 }
 
 class _AddMediAlegicState extends State<AddMediAlegic> {
-
   final TextEditingController _titleController=TextEditingController();
   final TextEditingController _descriptionController=TextEditingController();
   final _databaseHelper= DatabaseHelper();
@@ -30,7 +29,7 @@ class _AddMediAlegicState extends State<AddMediAlegic> {
           title: _titleController.text,
           description: _descriptionController.text,
           created: DateTime.now());
-      _databaseHelper.insertMedicalAllergic(allergic);
+      await _databaseHelper.insertMedicalAllergic(allergic);
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text("Medical allergy added successfully",style: TextStyle(
@@ -40,7 +39,7 @@ class _AddMediAlegicState extends State<AddMediAlegic> {
           duration: Duration(seconds: 4),
         ),
       );
-      Navigator.pop(context);
+      Navigator.pop(context,true);
     }catch(e){
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(

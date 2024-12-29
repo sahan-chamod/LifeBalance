@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:life_balance/db/ReportsModel.dart';
 import 'package:life_balance/firebase/user_helper.dart';
@@ -29,7 +28,6 @@ class _ReportHistoryScreenState extends State<ReportHistoryScreen> {
       data = datas;
     });
 
-    // Fetch images for the file paths
     for (var report in datas) {
       if (report.filePath != null) {
         File? file = await fetchImage(report.filePath!);
@@ -90,7 +88,6 @@ class _ReportHistoryScreenState extends State<ReportHistoryScreen> {
                   itemBuilder: (context, index) {
                     final report = data[index];
                     final file = imageFiles[report.filePath];
-
                     return GestureDetector(
                       onTap: () {
                         if (file != null) {

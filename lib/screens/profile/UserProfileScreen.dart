@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:life_balance/firebase/user_helper.dart';
 import 'package:life_balance/utils/app_colors.dart';
@@ -80,7 +78,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
     }
   }
-
 
   Future<void> _loadImage(String? url) async {
     final filePath = '$url';

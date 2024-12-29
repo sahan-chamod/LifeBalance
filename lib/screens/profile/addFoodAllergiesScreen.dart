@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:life_balance/controllers/foodAllergyController.dart';
 import 'package:life_balance/db/allergicModel.dart';
-import 'package:life_balance/routes/routes.dart';
 import 'package:life_balance/utils/app_colors.dart';
 
 class AddFoodAllergiesScreen extends StatefulWidget {
@@ -40,7 +39,7 @@ class _AddFoodAllergiesScreenState extends State<AddFoodAllergiesScreen> {
         ),
       );
       _controller.insertNewAllergy(allergic);
-      Navigator.pop(context);
+      Navigator.pop(context,true);
     }catch(e){
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(

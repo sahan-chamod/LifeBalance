@@ -60,11 +60,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
     });
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _loadImage(userProvider.profileImage);
-  }
+  // @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
+  //   _loadImage(userProvider.profileImage);
+  // }
 
   @override
   Widget build(BuildContext context) {

@@ -12,5 +12,9 @@ class FoodAllergyController{
     return await dbHelper.insertFoodAllergy(allergy);
   }
 
+  Future<void>delete(int id)async{
+    await dbHelper.deleteFoodAllergy(id);
+  }
+
 
 }
