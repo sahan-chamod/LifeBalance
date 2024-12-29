@@ -1,6 +1,5 @@
-
-
 import 'package:flutter/material.dart';
+import 'package:life_balance/firebase/user_helper.dart';
 import 'package:life_balance/utils/app_colors.dart';
 import 'package:provider/provider.dart';
 import 'package:life_balance/provider/user.proivder.dart';
@@ -23,12 +22,12 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     super.initState();
     userProvider = Provider.of<UserProvider>(context, listen: false);
     userProvider.userOtherDetails();
-    file=File(userProvider.profileImage);
       if (userProvider.user != null) {
         _nameController.text = userProvider.user?.displayName ?? '';
         _phoneNumber.text = userProvider.mobileNumber ?? '';
         _emailController.text = userProvider.user?.email ?? '';
         _dateController.text = userProvider.dateOfBirth ?? '';
+        _loadImage(userProvider.profileImage);
       }
 
   }
@@ -45,17 +44,47 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         _dateController.text,
         context
     );
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text("Profile details updated successfully",style: TextStyle(
+            fontSize:20.0
+        ),),
+        backgroundColor: Colors.green,
+        duration: Duration(seconds: 4),
+      ),
+    );
+
   }
 
   Future<void>addNewProImage()async{
     final ImagePicker picker = ImagePicker();
     final XFile? image = await picker.pickImage(source: ImageSource.gallery);
     if (image != null) {
-      userProvider.updateProfileImage(image.path);
-      setState(() {
-        file=File(image.path);
-      });
+     String? imagePath= await uploadImage(image.path);
+     if(imagePath!.isNotEmpty){
+       await userProvider.updateProfileImage(imagePath);
+       await _loadImage(imagePath);
+       ScaffoldMessenger.of(context).showSnackBar(
+         const SnackBar(
+           content: Text("Profile image updated successfully",style: TextStyle(
+               fontSize:20.0
+           ),),
+           backgroundColor: Colors.green,
+           duration: Duration(seconds: 4),
+         ),
+       );
+     }
+
     }
+  }
+
+  Future<void> _loadImage(String? url) async {
+    final filePath = '$url';
+    final imageFile = await fetchImage(filePath);
+    setState(() {
+      file=imageFile;
+    });
   }
 
   @override
@@ -83,7 +112,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     Expanded(
                       child: Center(
                         child: Text(
-                          "User Profile",
+                          "Profile",
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                             color: AppColors.primaryColor,
@@ -93,6 +122,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                         ),
                       ),
                     ),
+                    SizedBox(width: 35.0,)
                   ],
                 ),
                 const SizedBox(height: 20,),
@@ -211,6 +241,7 @@ Widget _inputFields(String label, TextEditingController controller,
 }
 
 Widget _profilePhoto(File? file,addNewProImage) {
+
   return Center(
     child: Stack(
       alignment: Alignment.center,

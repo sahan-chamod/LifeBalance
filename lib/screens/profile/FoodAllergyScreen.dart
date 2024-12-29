@@ -30,6 +30,19 @@ class _FoodAllergyScreenState extends State<FoodAllergyScreen> {
     });
   }
 
+  Future<void> delete(int id)async{
+    await _controller.delete(id);
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text("Record deleted successfully",style: TextStyle(
+            fontSize:20.0
+        ),),
+        backgroundColor: Colors.red,
+        duration: Duration(seconds: 4),
+      ),
+    );
+    refreshItems();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +51,7 @@ class _FoodAllergyScreenState extends State<FoodAllergyScreen> {
           child: Padding(
               padding: EdgeInsets.all(20),
                   child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -68,51 +81,63 @@ class _FoodAllergyScreenState extends State<FoodAllergyScreen> {
                           const SizedBox(width: 48), // Spacer to balance alignment
                         ],
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          IconButton(
-                            onPressed: () {
-                              Navigator.pushNamed(context, AppRoutes.addFoodAllergy);
-                            },
-                            icon: const Icon(
-                              Icons.add,
-                              color: AppColors.primaryColor,
-                            ),
-                          )
-                        ],),
                       const SizedBox(height: 20),
                       Expanded(
                         child: ListView(
                           children: [
-                            ...data.map((toElement)=>_alegi(toElement))
+                            ...data.map((toElement)=>_alegi(toElement,delete))
                           ],
                         ),
                       ),
                     ],
           ),
           )),
+
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () async {
+          final result = await Navigator.pushNamed(context, AppRoutes.addFoodAllergy);
+          if (result == true) {
+            refreshItems();
+          }
+        },
+        icon: const Icon(Icons.add, color: Colors.white),
+        label: const Text(
+          "Add New",
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: AppColors.primaryColor,
+      ),
     );
   }
 }
 
-Widget _alegi(Allergic allergic) {
+Widget _alegi(Allergic allergic,delete) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      Text(
-        allergic.title,
-        style: TextStyle(
-          color: AppColors.primaryColor,
-          fontWeight: FontWeight.bold,
-        ),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            allergic.title,
+            style: TextStyle(
+                color: AppColors.primaryColor,
+                fontWeight: FontWeight.bold,
+                fontSize: 19.0
+            ),
+          ),
+          TextButton(onPressed: ()async{
+            print(allergic.toMap());
+            await  delete(allergic.id);
+          }, child: Icon(Icons.delete,color: Colors.red,))
+        ],
       ),
       const SizedBox(height: 20),
       Text(
         allergic.description,
         style: TextStyle(
-          color: AppColors.primaryColor,
-          fontWeight: FontWeight.bold,
+          color: Colors.grey,
+          fontWeight: FontWeight.normal,
         ),
       ),
       const SizedBox(height: 30),

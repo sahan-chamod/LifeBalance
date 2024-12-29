@@ -54,7 +54,7 @@ class DatabaseHelper {
         "description": allergic.description,
         "created": allergic.created.toIso8601String(),
       },
-      conflictAlgorithm: ConflictAlgorithm.replace, // Handle conflicts
+      conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
 
@@ -67,7 +67,7 @@ class DatabaseHelper {
         "description": allergic.description,
         "created": allergic.created.toIso8601String(),
       },
-      conflictAlgorithm: ConflictAlgorithm.replace, // Handle conflicts
+      conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
 
@@ -77,6 +77,7 @@ class DatabaseHelper {
 
     return maps.map((map) {
       return Allergic(
+        id:map['id'] as int,
         title: map['title'] as String,
         description: map['description'] as String,
         created: DateTime.parse(map['created'] as String),
@@ -90,10 +91,24 @@ class DatabaseHelper {
 
     return maps.map((map) {
       return Allergic(
+        id:map['id'] as int,
         title: map['title'] as String,
         description: map['description'] as String,
         created: DateTime.parse(map['created'] as String),
       );
     }).toList();
   }
+
+  Future<void>deleteMedicalAllergy(int id) async{
+      final db=await database;
+      await db.delete("medicalAllergic",where:"id = ?",whereArgs: [id] );
+  }
+
+  Future<void>deleteFoodAllergy(int id) async{
+    final db=await database;
+    await db.delete("foodAllergic",where:"id = ?",whereArgs: [id] );
+  }
+
+
+
 }

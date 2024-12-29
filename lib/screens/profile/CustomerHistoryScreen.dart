@@ -54,7 +54,7 @@ class _SettingsScreenState extends State<CustomerHistoryScreen> {
                       CustomListTitle(
                         icon: Icons.report_problem,
                         title: 'Report History',
-                        route: AppRoutes.password,
+                        route: AppRoutes.reportHistory,
                       ),
                       CustomListTitle(
                         icon: Icons.heart_broken,

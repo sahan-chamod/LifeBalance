@@ -23,7 +23,7 @@ class Allergic{
 
   factory Allergic.fromMap(Map<String, dynamic> map) {
     return Allergic(
-      id: map['id'],
+      id: map['id'] as int?,
       title: map['title'],
       description: map['description'],
       created: DateTime.parse(map['created']),

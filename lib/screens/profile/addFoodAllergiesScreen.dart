@@ -28,7 +28,30 @@ class _AddFoodAllergiesScreenState extends State<AddFoodAllergiesScreen> {
         title: _titleController.text,
         description: _descriptionController.text,
         created: DateTime.now());
-    _controller.insertNewAllergy(allergic);
+    try{
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Food allergy added successfully",style: TextStyle(
+              fontSize:20.0
+          ),),
+          backgroundColor: Colors.green,
+          duration: Duration(seconds: 4),
+        ),
+      );
+      _controller.insertNewAllergy(allergic);
+      Navigator.pop(context,true);
+    }catch(e){
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("something went wrong!",style: TextStyle(
+              fontSize:20.0
+          ),),
+          backgroundColor: Colors.green,
+          duration: Duration(seconds: 2), // Adjust duration as needed
+        ),
+      );
+    }
+
   }
 
   @override
@@ -97,6 +120,7 @@ class _AddFoodAllergiesScreenState extends State<AddFoodAllergiesScreen> {
           ],
         ),
       )),
+
     );
   }
 }

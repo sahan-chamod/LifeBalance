@@ -7,4 +7,8 @@ class MedicalAllergyController{
   Future<List<Allergic>>fetchAllergies()async{
     return await dbHelper.getMedicalAllergic();
   }
+
+  Future<void>delete(int id)async{
+    await dbHelper.deleteMedicalAllergy(id);
+  }
 }

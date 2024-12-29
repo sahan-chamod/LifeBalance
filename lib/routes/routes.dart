@@ -7,6 +7,8 @@ import 'package:life_balance/screens/profile/PasswordScreen.dart';
 import 'package:life_balance/screens/profile/PrivacyPolicyScreen.dart';
 import 'package:life_balance/screens/profile/UserProfileScreen.dart';
 import 'package:life_balance/screens/profile/addFoodAllergiesScreen.dart';
+import 'package:life_balance/screens/profile/reports/AddReportHistory.dart';
+import 'package:life_balance/screens/profile/reports/ReportHistoryScreen.dart';
 import '../screens/Loginscreen.dart';
 import '../screens/Patients/payment/AddCardScreen.dart';
 import '../screens/Patients/payment/PaymentMethodApp.dart';
@@ -44,6 +46,8 @@ class AppRoutes {
   static const String schedule = '/schedule';
   static const String Payments = '/payments';
   static const String addcards = '/addcards';
+  static const String reportHistory = '/reportHistory';
+  static const String addReportHistory = '/addReportHistory';
 
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -86,8 +90,10 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => const Schedule());
       case Payments:
         return MaterialPageRoute(builder: (_) => PaymentMethodScreen());
-      case adminHome:
-        return MaterialPageRoute(builder: (_) => AddCardScreen());
+      case reportHistory:
+        return MaterialPageRoute(builder: (_) => const ReportHistoryScreen());
+      case addReportHistory:
+        return MaterialPageRoute(builder: (_) =>  AddReportHistory());
       default:
         return MaterialPageRoute(builder: (_) => const LoginScreen());
     }
