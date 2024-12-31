@@ -22,8 +22,7 @@ import '../screens/profile/SettingsScreen.dart';
 import '../screens/Patients/Chat/ChatScreen.dart';
 import '../screens/Patients/Notifications/NotificationsScreen.dart';
 import '../screens/Patients/Schedule/ScheduleScreen.dart';
-
-
+import '../screens/appoinments/appoinment.dart';
 
 class AppRoutes {
   static const String login = '/login';
@@ -31,16 +30,16 @@ class AppRoutes {
   static const String home = '/home';
   static const String doctorHome = '/doctor_home';
   static const String adminHome = '/admin_home';
-  static const String profile= "/profile";
-  static const String userProfile="/userProfile";
-  static const String userSettings="/settings";
-  static const String password="/password";
-  static const String privacyPolicy="/privacy";
-  static const String customerHistory="/history";
-  static const String mediAlegic="/mediAlegic";
-  static const String addMediAlegic="/addMedAligic";
-  static const String foodAllergy="/foodAllergy";
-  static const String addFoodAllergy="/addFoodAllergy";
+  static const String profile = "/profile";
+  static const String userProfile = "/userProfile";
+  static const String userSettings = "/settings";
+  static const String password = "/password";
+  static const String privacyPolicy = "/privacy";
+  static const String customerHistory = "/history";
+  static const String mediAlegic = "/mediAlegic";
+  static const String addMediAlegic = "/addMedAligic";
+  static const String foodAllergy = "/foodAllergy";
+  static const String addFoodAllergy = "/addFoodAllergy";
   static const String chat = '/chat';
   static const String notifications = '/notifications';
   static const String schedule = '/schedule';
@@ -48,7 +47,7 @@ class AppRoutes {
   static const String addcards = '/addcards';
   static const String reportHistory = '/reportHistory';
   static const String addReportHistory = '/addReportHistory';
-
+  static const String appoinments = '/appoinments';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -81,7 +80,8 @@ class AppRoutes {
       case foodAllergy:
         return MaterialPageRoute(builder: (_) => const FoodAllergyScreen());
       case addFoodAllergy:
-        return MaterialPageRoute(builder: (_) => const AddFoodAllergiesScreen());
+        return MaterialPageRoute(
+            builder: (_) => const AddFoodAllergiesScreen());
       case chat:
         return MaterialPageRoute(builder: (_) => const Chat());
       case notifications:
@@ -93,9 +93,12 @@ class AppRoutes {
       case reportHistory:
         return MaterialPageRoute(builder: (_) => const ReportHistoryScreen());
       case addReportHistory:
-        return MaterialPageRoute(builder: (_) =>  AddReportHistory());
+        return MaterialPageRoute(builder: (_) => AddReportHistory());
+      case appoinments:
+        return MaterialPageRoute(builder: (_) => Appointments());
       default:
-        return MaterialPageRoute(builder: (_) => const LoginScreen());
+        // return MaterialPageRoute(builder: (_) => const LoginScreen());
+        return MaterialPageRoute(builder: (_) => Appointments());
     }
   }
 }
