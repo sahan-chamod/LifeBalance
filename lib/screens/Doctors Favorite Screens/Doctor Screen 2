@@ -1,0 +1,166 @@
+import 'package:flutter/material.dart';
+
+void main() => runApp(const DoctorInfoApp());
+
+class DoctorInfoApp extends StatelessWidget {
+  const DoctorInfoApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: DoctorInfoScreen(),
+    );
+  }
+}
+
+class DoctorInfoScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.blue),
+          onPressed: () {},
+        ),
+        title: const Text(
+          "Doctor Info",
+          style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+        ),
+        centerTitle: true,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.search, color: Colors.blue),
+            onPressed: () {},
+          ),
+          IconButton(
+            icon: const Icon(Icons.share, color: Colors.blue),
+            onPressed: () {},
+          ),
+        ],
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                const Text(
+                  "Sort By",
+                  style: TextStyle(fontSize: 16, color: Colors.black),
+                ),
+                const SizedBox(width: 8),
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: Colors.blue.shade100,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Row(
+                    children: const [
+                      Text(
+                        "A - Z",
+                        style: TextStyle(fontSize: 14, color: Colors.blue),
+                      ),
+                      SizedBox(width: 4),
+                      Icon(Icons.arrow_drop_down, color: Colors.blue),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              elevation: 4,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CircleAvatar(
+                          radius: 40,
+                          backgroundImage: AssetImage("assets/doctor.jpg"),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  const Icon(Icons.star, color: Colors.amber),
+                                  const SizedBox(width: 4),
+                                  const Text("15 years experience"),
+                                ],
+                              ),
+                              const SizedBox(height: 8),
+                              Container(
+                                padding: const EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                  color: Colors.blue,
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: const Text(
+                                  "Focus: The impact of hormonal imbalances on skin conditions, specializing in acne, hirsutism, and other skin disorders.",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    const Text(
+                      "Dr. Alexander Bennett, Ph.D.",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const Text(
+                      "Dermato-Genetics",
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                    const SizedBox(height: 16),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Column(
+                          children: const [
+                            Icon(Icons.star, color: Colors.blue),
+                            SizedBox(height: 4),
+                            Text("5", style: TextStyle(fontSize: 12)),
+                          ],
+                        ),
+                        Column(
+                          children: const [
+                            Icon(Icons.group, color: Colors.blue),
+                            SizedBox(height: 4),
+                            Text("40", style: TextStyle(fontSize: 12)),
+                          ],
+                        ),
+                        Column(
+                          children: const [
+                            Icon(Icons.schedule, color: Colors.blue),
+                            SizedBox(height: 4),
+                            Text("Mon-Sat / 9:00AM - 5:00PM",
+                                style: TextStyle(fontSize: 12)),
+                          ],
+                        ),
+                        Column(
+                          children: const [
+                            Icon(Icons.schedule_send, color: Colors.blue),
+                            ),
