@@ -46,12 +46,10 @@ Future<void>updatePassword(String oldPassword,String newPassword,BuildContext co
 Future<String?> uploadImage(String filePath) async {
   final url = Uri.parse('https://api.bytescale.com/v2/accounts/FW25cKz/uploads/form_data');
   final file = File(filePath);
-
   if (!file.existsSync()) {
     print('Error: File does not exist at the specified path.');
     return null;
   }
-
   var request = http.MultipartRequest('POST', url)
     ..headers['Authorization'] = 'Bearer public_FW25cKzG2fYwSFmw6WeTMeri9U5z'
     ..files.add(await http.MultipartFile.fromPath('file', filePath));
@@ -89,18 +87,11 @@ Future<File?> fetchImage(String filePath) async {
     final response = await http.get(url, headers: headers);
 
     if (response.statusCode == 200) {
-      print('Image fetched successfully.');
-
-      // Create a temporary file to save the image
       final tempDir = Directory.systemTemp;
       final tempFile = File('${tempDir.path}/${filePath.split('/').last}');
-
-      // Write the bytes to the file
       await tempFile.writeAsBytes(response.bodyBytes);
-
       return tempFile;
     } else {
-
       print('Failed to fetch image. Status: ${response}');
       return null;
     }
