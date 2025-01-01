@@ -97,8 +97,8 @@ class AppRoutes {
       case appoinments:
         return MaterialPageRoute(builder: (_) => Appointments());
       default:
-        // return MaterialPageRoute(builder: (_) => const LoginScreen());
-        return MaterialPageRoute(builder: (_) => Appointments());
+        return MaterialPageRoute(builder: (_) => const LoginScreen());
+       
     }
   }
 }
