@@ -1,23 +1,73 @@
 import 'package:flutter/material.dart';
-import '../../../utils/app_colors.dart';
+import 'package:life_balance/firebase/chat_helper.dart';
+import 'package:life_balance/utils/app_colors.dart';
 
 class Chat extends StatefulWidget {
-  const Chat({Key? key}) : super(key: key);
+  final String? chatId;
+  final String? doctorId;
+  final String? dynamicName;
+
+  const Chat({this.chatId, this.doctorId, this.dynamicName, Key? key}) : super(key: key);
 
   @override
   _ChatState createState() => _ChatState();
 }
 
 class _ChatState extends State<Chat> {
-  int _currentIndex = 0;
+  final ChatHelper _chatHelper = ChatHelper();
+  final TextEditingController _messageController = TextEditingController();
+  final ScrollController scrollController = ScrollController();
+
+  String? _userId;
+  String? _currentChatId;
+  List<Map<String, dynamic>> _messages = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeChat();
+  }
+
+  Future<void> _initializeChat() async {
+    _userId = await _chatHelper.getUserId();
+    if (_userId != null) {
+      if (widget.chatId == null) {
+        _currentChatId = await _chatHelper.checkAndCreateChat(_userId!, widget.doctorId);
+      } else {
+        _currentChatId = widget.chatId;
+      }
+      _listenToMessages();
+    }
+  }
+
+  void _listenToMessages() {
+    if (_currentChatId != null) {
+      _chatHelper.listenToMessages(_currentChatId!).listen((messages) {
+        setState(() {
+          _messages = messages;
+          _scrollToBottom();
+        });
+      });
+    }
+  }
+
+  void _scrollToBottom() {
+    if (scrollController.hasClients) {
+      scrollController.animateTo(
+        scrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeOut,
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: _buildBottomNavigationBar(),
+      backgroundColor: Colors.white,
       body: Column(
         children: [
-          _buildHeader(),
+          _buildHeader(widget.dynamicName),
           Expanded(
             child: Container(
               decoration: const BoxDecoration(
@@ -27,233 +77,189 @@ class _ChatState extends State<Chat> {
                   topRight: Radius.circular(30),
                 ),
               ),
-              child: Stack(
-                children: [
-                  _buildChatArea(),
-                  _buildInputField(),
-                ],
-              ),
+              child: _buildChatArea(),
             ),
           ),
+          _buildInputField(),
         ],
       ),
     );
   }
 
-  Widget _buildBottomNavigationBar() {
-    return Container(
-      margin: const EdgeInsets.all(12),
-      height: 70,
-      decoration: BoxDecoration(
-        color: const Color(0xFF225FFF),
-        borderRadius: BorderRadius.circular(30),
-        boxShadow: const [
-          BoxShadow(
-            color: Colors.black12,
-            spreadRadius: 1,
-            blurRadius: 8,
-            offset: Offset(0, 3),
-          ),
-        ],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          _buildNavBarItem(Icons.home, 0),
-          _buildNavBarItem(Icons.chat_bubble_outline, 1),
-          _buildNavBarItem(Icons.person_outline, 2, hasNotification: true),
-          _buildNavBarItem(Icons.calendar_today_outlined, 3),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildNavBarItem(IconData icon, int index, {bool hasNotification = false}) {
-    final bool isSelected = _currentIndex == index;
-
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          _currentIndex = index;
-        });
-      },
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Stack(
-            children: [
-              Icon(
-                icon,
-                size: 30,
-                color: isSelected ? Colors.white : Colors.white70,
-              ),
-              if (hasNotification)
-                Positioned(
-                  top: 0,
-                  right: 0,
-                  child: Container(
-                    width: 8,
-                    height: 8,
-                    decoration: const BoxDecoration(
-                      color: Colors.red,
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-                ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildHeader() {
+  Widget _buildHeader(String? dynamicName) {
     return SafeArea(
       child: Container(
-      height: 78,
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      decoration: const BoxDecoration(
-        color: Color(0xFF225FFF),
-
-      ),
-      child: Row(
-        children: [
-          IconButton(
-            icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-          const Expanded(
-            child: Center(
-              child: Text(
-                'Dr. Olivia Turner',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontFamily: 'League Spartan',
-                  fontWeight: FontWeight.w600,
+        height: 78,
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        decoration: const BoxDecoration(
+          color: AppColors.primaryColor,
+        ),
+        child: Row(
+          children: [
+            IconButton(
+              icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            Expanded(
+              child: Center(
+                child: FutureBuilder<String?>(
+                  future: _chatHelper.checkIfDefaultNameIsNull(dynamicName, widget.doctorId),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData && snapshot.data != null) {
+                      return Text(
+                        snapshot.data!,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontFamily: 'League Spartan',
+                          fontWeight: FontWeight.w600,
+                        ),
+                      );
+                    } else {
+                      return const SizedBox();
+                    }
+                  },
                 ),
               ),
             ),
-          ),
-          Row(
-            children: [
-              IconButton(
-                icon: const Icon(Icons.call, color: Colors.white),
-                onPressed: () {},
-              ),
-              IconButton(
-                icon: const Icon(Icons.videocam, color: Colors.white),
-                onPressed: () {},
-              ),
-            ],
-          ),
-        ],
+            Row(
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.call, color: Colors.white),
+                  onPressed: () {},
+                ),
+                IconButton(
+                  icon: const Icon(Icons.video_call, color: Colors.white),
+                  onPressed: () {},
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
-    ),
-      );
+    );
   }
 
   Widget _buildChatArea() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: ListView(
-        children: [
-          _buildChatBubble('Lorem ipsum dolor sit amet, consectetur adipiscing elit.', isSender: false, time: '09:30'),
-          _buildChatBubble('Lorem ipsum dolor sit amet, consectetur adipiscing elit.', isSender: true, time: '09:43'),
-          _buildChatBubble('Lorem ipsum dolor sit amet.', isSender: true, time: '09:55'),
-        ],
-      ),
+    return ListView.builder(
+      controller: scrollController,
+      itemCount: _messages.length,
+      itemBuilder: (context, index) {
+        final message = _messages[index];
+        return _buildChatBubble(
+          message['text'],
+          senderId: message['senderId'],
+          time: message['time'],
+        );
+      },
     );
   }
 
-  Widget _buildChatBubble(String text, {required bool isSender, required String time}) {
-    return Align(
-      alignment: isSender ? Alignment.centerRight : Alignment.centerLeft,
-      child: Column(
-        crossAxisAlignment: isSender ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-        children: [
-          Container(
-            margin: const EdgeInsets.only(top: 8.0),
-            padding: const EdgeInsets.all(12.0),
-            decoration: BoxDecoration(
-              color: isSender ? const Color(0xFF225FFF) : const Color(0xFFECF1FF),
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Text(
-              text,
-              style: TextStyle(
-                color: isSender ? Colors.white : const Color(0xFF225FFF),
-                fontSize: 14,
+  Widget _buildChatBubble(String text, {required String senderId, required String time}) {
+    final isSender = senderId == _userId;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+      child: Align(
+        alignment: isSender ? Alignment.centerRight : Alignment.centerLeft,
+        child: Column(
+          crossAxisAlignment: isSender ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+          children: [
+            Container(
+              margin: const EdgeInsets.only(top: 8.0),
+              padding: const EdgeInsets.all(12.0),
+              decoration: BoxDecoration(
+                color: isSender ? AppColors.primaryColor : const Color(0xFFECF1FF),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(isSender ? 16 : 0),
+                  topRight: Radius.circular(isSender ? 0 : 16),
+                  bottomLeft: const Radius.circular(16),
+                  bottomRight: const Radius.circular(16),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 4,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Text(
+                text,
+                style: TextStyle(
+                  color: isSender ? Colors.white : const Color(0xFF225FFF),
+                  fontSize: 15,
+                  fontWeight: FontWeight.w400,
+                  height: 1.5,
+                ),
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 4.0),
-            child: Text(
-              time,
-              style: const TextStyle(
-                color: Colors.grey,
-                fontSize: 12,
+            Padding(
+              padding: const EdgeInsets.only(top: 4.0),
+              child: Text(
+                time.substring(11, 19),
+                style: const TextStyle(
+                  color: AppColors.textColor,
+                  fontSize: 12,
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildInputField() {
-    return Positioned(
-      bottom: 16,
-      left: 16,
-      right: 16,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        height: 50,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(30),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black12.withOpacity(0.1),
-              blurRadius: 8,
-              offset: const Offset(0, 3),
-            ),
-          ],
-        ),
-        child: Row(
-          children: [
-            IconButton(
-              icon: const Icon(Icons.photo_camera, color: Color(0xFF225FFF)),
-              onPressed: () {},
-            ),
-            const Expanded(
-              child: TextField(
-                decoration: InputDecoration(
-                  hintText: 'Write Here...',
-                  hintStyle: TextStyle(color: Color(0xFFA9BBFD)),
-                  border: InputBorder.none,
+    return Padding(
+        padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16, top: 8),
+      child: Row(
+        children: [
+          Expanded(
+            child: TextField(
+              controller: _messageController,
+              decoration: InputDecoration(
+                hintText: 'Type your message...',
+                hintStyle: TextStyle(color: AppColors.textColor),
+                filled: true,
+                fillColor: AppColors.inputBackground,
+                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide.none,
                 ),
               ),
+              onSubmitted: (text) => _sendMessage(),
             ),
-            Container(
-              decoration: const BoxDecoration(
-                color: Color(0xFF225FFF),
-                shape: BoxShape.circle,
-              ),
-              child: IconButton(
-                icon: const Icon(Icons.send, color: Colors.white),
-                onPressed: () {},
-              ),
+          ),
+          const SizedBox(width: 8),
+          CircleAvatar(
+            backgroundColor: AppColors.primaryColor,
+            child: IconButton(
+              icon: const Icon(Icons.send, color: Colors.white),
+              onPressed: _sendMessage,
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
+
+  void _sendMessage() {
+    if (_currentChatId != null && _userId != null) {
+      final text = _messageController.text;
+      _chatHelper.sendMessage(_currentChatId!, _userId!, text);
+      _messageController.clear();
+      _scrollToBottom();
+    }
+  }
+
+  @override
+  void dispose() {
+    _messageController.dispose();
+    scrollController.dispose();
+    super.dispose();
+  }
 }
-
-
-
