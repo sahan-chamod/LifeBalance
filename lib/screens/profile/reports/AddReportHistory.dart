@@ -13,7 +13,6 @@ class AddReportHistory extends StatefulWidget {
 class _AddReportHistoryState extends State<AddReportHistory> {
   File? selectedFile;
   String? selectedFileName;
-  final UserProvider _userProvider = UserProvider();
 
   Future<void> pickFile() async {
     final result = await FilePicker.platform.pickFiles(
@@ -34,8 +33,8 @@ class _AddReportHistoryState extends State<AddReportHistory> {
   Future<void> uploadDoc() async {
     if (selectedFile != null) {
       try {
-        await uploadImage(selectedFile!.path);
-        await uploadDocument(selectedFile?.path);
+        String? imagePath= await uploadImage(selectedFile!.path);
+        await uploadDocument(imagePath);
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text(

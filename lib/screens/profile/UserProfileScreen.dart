@@ -81,6 +81,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
   Future<void> _loadImage(String? url) async {
     final filePath = '$url';
+    print('$filePath filePath');
     final imageFile = await fetchImage(filePath);
     setState(() {
       file=imageFile;
