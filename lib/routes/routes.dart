@@ -24,6 +24,11 @@ import '../screens/Patients/Notifications/NotificationsScreen.dart';
 import '../screens/Patients/Schedule/ScheduleScreen.dart';
 import '../screens/appoinments/appoinment.dart';
 import '../screens/Patients/Chat/ChatList.dart';
+import '../screens/Doctors Favorite Screens/Doctor Screen 1.dart';
+import '../screens/Doctors Favorite Screens/Doctor Screen 2.dart';
+import '../screens/Doctors Favorite Screens/Doctor Screen 3.dart';
+import '../screens/Doctors Favorite Screens/Doctor Screen 4.dart';
+import '../screens/Doctors Favorite Screens/Review screen.dart';
 
 
 class AppRoutes {
@@ -52,6 +57,10 @@ class AppRoutes {
   static const String chatlist = '/chatlist';
 
   static const String appoinments = '/appoinments';
+  static const String doctorInfo = '/doctorInfo';
+  static const String doctorRating = './doctorRating';
+  static const String favoriteScreen = './favoriteScreen';
+  static const String reviewScreen = './reviewScreen';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -62,7 +71,7 @@ class AppRoutes {
       case home:
         return MaterialPageRoute(builder: (_) => const HomeScreen());
       case doctorHome:
-        return MaterialPageRoute(builder: (_) => const DoctorHomeScreen());
+        return MaterialPageRoute(builder: (_) => const DoctorsScreen());
       case adminHome:
         return MaterialPageRoute(builder: (_) => const AdminHomeScreen());
       case profile:
@@ -104,6 +113,14 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => AddReportHistory());
       case appoinments:
         return MaterialPageRoute(builder: (_) => Appointments());
+      case doctorInfo:
+        return MaterialPageRoute(builder: (_) => DoctorInfoScreen());
+      case doctorRating:
+        return MaterialPageRoute(builder: (_) => RatingScreen());
+      case reviewScreen:
+        return MaterialPageRoute(builder: (_) => ReviewScreen());
+      case favoriteScreen:
+        return MaterialPageRoute(builder: (_) => FavoriteScreen());
       default:
         return MaterialPageRoute(builder: (_) => const LoginScreen());
        
