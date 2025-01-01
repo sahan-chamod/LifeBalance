@@ -31,7 +31,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
 
     if (userProvider.user != null) {
-      print(userProvider.profileImage);
       _loadImage(userProvider.profileImage);
     }
 
@@ -52,19 +51,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
     await _firebaseService.logoutUser();
   }
 
+  // Future<void> _loadImage(String? url) async {
+  //   final filePath = '$url';
+  //   final imageFile = await fetchImage(filePath);
+  //   setState(() {
+  //     file=imageFile;
+  //   });
+  // }
+
   Future<void> _loadImage(String? url) async {
     final filePath = '$url';
+    print('$filePath filePath');
     final imageFile = await fetchImage(filePath);
     setState(() {
       file=imageFile;
     });
   }
 
-  // @override
-  // void didChangeDependencies() {
-  //   super.didChangeDependencies();
-  //   _loadImage(userProvider.profileImage);
-  // }
 
   @override
   Widget build(BuildContext context) {

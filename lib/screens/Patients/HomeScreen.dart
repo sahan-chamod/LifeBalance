@@ -1,6 +1,10 @@
+import 'dart:io';
+import 'package:life_balance/firebase/user_helper.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:life_balance/routes/routes.dart';
 import '../../utils/app_colors.dart';
+import 'package:life_balance/provider/user.proivder.dart';
 import 'Chat/ChatScreen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -12,6 +16,30 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
+  late UserProvider userProvider;
+  File? file;
+  String? name;
+
+  @override
+  void initState() {
+    super.initState();
+    userProvider = Provider.of<UserProvider>(context, listen: false);
+    userProvider.userOtherDetails();
+    print(userProvider.user?.displayName);
+    if (userProvider.user?.displayName != null) {
+      name = userProvider.user?.displayName ?? "";
+      _loadImage(userProvider.profileImage);
+    }
+  }
+
+  Future<void> _loadImage(String? url) async {
+    final filePath = '$url';
+    final imageFile = await fetchImage(filePath);
+    print(imageFile);
+    setState(() {
+      file=imageFile;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,18 +48,18 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,
-        leading: const Padding(
+        leading:  Padding(
           padding: EdgeInsets.all(8.0),
           child: CircleAvatar(
-            backgroundImage: AssetImage('assets/images/profile_pic.jpg'),
+              backgroundImage: file != null ? FileImage(file!) : null,
           ),
         ),
-        title: const Column(
+        title:  Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text("Hi, Welcome Back",
                 style: TextStyle(fontSize: 16, color: AppColors.textColor)),
-            Text("John Doe",
+            Text(name ?? "",
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
           ],
         ),

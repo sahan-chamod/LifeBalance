@@ -29,8 +29,11 @@ class _ReportHistoryScreenState extends State<ReportHistoryScreen> {
     });
 
     for (var report in datas) {
+
       if (report.filePath != null) {
+        // https://upcdn.io/FW25cKz/raw/uploads/2024/12/26/4k6wpiBn4d-1-intro-photo-final.jpg
         File? file = await fetchImage(report.filePath!);
+        print('$file  refreshItems');
         setState(() {
           imageFiles[report.filePath!] = file;
         });
@@ -38,9 +41,7 @@ class _ReportHistoryScreenState extends State<ReportHistoryScreen> {
     }
   }
 
-  Future<File?> fetchImage(String filePath) async {
-    return File(filePath);
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -129,8 +130,11 @@ class _ReportHistoryScreenState extends State<ReportHistoryScreen> {
         
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: (){
-          Navigator.pushNamed(context, AppRoutes.addReportHistory);
+        onPressed: ()async{
+          final result =await Navigator.pushNamed(context, AppRoutes.addReportHistory);
+          if (result == true) {
+            refreshItems();
+          }
         },
         foregroundColor: AppColors.primaryColor,
         backgroundColor: AppColors.primaryColor,

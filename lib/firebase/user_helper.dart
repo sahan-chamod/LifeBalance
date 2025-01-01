@@ -57,7 +57,6 @@ Future<String?> uploadImage(String filePath) async {
     ..files.add(await http.MultipartFile.fromPath('file', filePath));
 
   try {
-
     var response = await request.send();
     if (response.statusCode == 200) {
       var responseData = await response.stream.bytesToString();
