@@ -45,8 +45,9 @@ class _ChatState extends State<Chat> {
       _chatHelper.listenToMessages(_currentChatId!).listen((messages) {
         setState(() {
           _messages = messages;
-          _scrollToBottom();
+
         });
+        _scrollToBottom();
       });
     }
   }
