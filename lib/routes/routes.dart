@@ -23,6 +23,8 @@ import '../screens/Patients/Chat/ChatScreen.dart';
 import '../screens/Patients/Notifications/NotificationsScreen.dart';
 import '../screens/Patients/Schedule/ScheduleScreen.dart';
 import '../screens/appoinments/appoinment.dart';
+import '../screens/Patients/Chat/ChatList.dart';
+
 
 class AppRoutes {
   static const String login = '/login';
@@ -47,6 +49,8 @@ class AppRoutes {
   static const String addcards = '/addcards';
   static const String reportHistory = '/reportHistory';
   static const String addReportHistory = '/addReportHistory';
+  static const String chatlist = '/chatlist';
+
   static const String appoinments = '/appoinments';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -83,13 +87,17 @@ class AppRoutes {
         return MaterialPageRoute(
             builder: (_) => const AddFoodAllergiesScreen());
       case chat:
-        return MaterialPageRoute(builder: (_) => const Chat());
+        return MaterialPageRoute(builder: (_) =>  Chat());
       case notifications:
         return MaterialPageRoute(builder: (_) => const Notifications());
       case schedule:
         return MaterialPageRoute(builder: (_) => const Schedule());
       case Payments:
         return MaterialPageRoute(builder: (_) => PaymentMethodScreen());
+      case adminHome:
+        return MaterialPageRoute(builder: (_) => AddCardScreen());
+      case chatlist:
+        return MaterialPageRoute(builder: (_) => ChatList());
       case reportHistory:
         return MaterialPageRoute(builder: (_) => const ReportHistoryScreen());
       case addReportHistory:

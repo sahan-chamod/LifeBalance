@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:life_balance/utils/app_colors.dart';
+import 'package:life_balance/firebase/notification_helper.dart';
+import 'package:life_balance/routes/routes.dart';
 
 class Notifications extends StatefulWidget {
   const Notifications({Key? key}) : super(key: key);
@@ -9,10 +12,33 @@ class Notifications extends StatefulWidget {
 
 class _NotificationsState extends State<Notifications> {
   int _currentIndex = 0;
+  Map<String, List<Map<String, dynamic>>> _notifications = {};
+  final NotificationsHelper _helper = NotificationsHelper();
+
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchNotifications();
+  }
+
+
+  Future<void> _fetchNotifications() async {
+    try {
+      final notifications = await _helper.fetchNotifications();
+      setState(() {
+        _notifications = notifications;
+      });
+    } catch (e) {
+      print("Error fetching notifications: $e");
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.secondaryColor,
       body: SafeArea(
         child: Column(
           children: [
@@ -31,33 +57,19 @@ class _NotificationsState extends State<Notifications> {
                       children: [
                         _buildHeader(),
                         const SizedBox(height: 20),
-                        _buildSectionLabel('Today'),
-                        const SizedBox(height: 10),
-                        _buildNotificationItem(
-                          avatarColor: const Color(0xFF225FFF),
-                          title: 'Scheduled appointment',
-                          description:
-                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-                          time: '2 m',
-                        ),
-                        const SizedBox(height: 30),
-                        _buildSectionLabel('Yesterday'),
-                        const SizedBox(height: 10),
-                        _buildNotificationItem(
-                          avatarColor: const Color(0xFF225FFF),
-                          title: 'Follow-up Reminder',
-                          description: 'Your next follow-up is due tomorrow.',
-                          time: '1 d',
-                        ),
-                        const SizedBox(height: 30),
-                        _buildSectionLabel('15 April'),
-                        const SizedBox(height: 10),
-                        _buildNotificationItem(
-                          avatarColor: const Color(0xFF225FFF),
-                          title: 'Health Tips',
-                          description: 'Drink at least 2 liters of water daily.',
-                          time: '3 d',
-                        ),
+                        for (var dateKey in _notifications.keys) ...[
+                          _buildSectionLabel(dateKey),
+                          const SizedBox(height: 10),
+                          for (var notification in _notifications[dateKey]!) ...[
+                            _buildNotificationItem(
+                              avatarColor: notification['avatarColor'],
+                              title: notification['title'],
+                              description: notification['description'],
+                              time: notification['time'],
+                            ),
+                            const SizedBox(height: 30),
+                          ]
+                        ],
                       ],
                     ),
                   ),
@@ -71,6 +83,7 @@ class _NotificationsState extends State<Notifications> {
     );
   }
 
+
   Widget _buildHeader() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -79,7 +92,7 @@ class _NotificationsState extends State<Notifications> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             IconButton(
-              icon: Icon(Icons.arrow_back_ios, color: Color(0xFF225FFF)),
+              icon: Icon(Icons.arrow_back_ios, color: AppColors.primaryColor),
               onPressed: () {
                 Navigator.pop(context);
               },
@@ -89,14 +102,14 @@ class _NotificationsState extends State<Notifications> {
                 'Notification',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: Color(0xFF225FFF),
+                  color: AppColors.primaryColor,
                   fontSize: 24,
                   fontFamily: 'League Spartan',
                   fontWeight: FontWeight.w600,
                 ),
               ),
             ),
-            SizedBox(width: 48), // Placeholder to align title in the center
+            SizedBox(width: 48),
           ],
         ),
         const SizedBox(height: 10),
@@ -108,6 +121,7 @@ class _NotificationsState extends State<Notifications> {
           ],
         ),
       ],
+
     );
   }
 
@@ -115,7 +129,7 @@ class _NotificationsState extends State<Notifications> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
       decoration: BoxDecoration(
-        color: const Color(0xFFC9D5FF),
+        color: AppColors.hintColor,
         borderRadius: BorderRadius.circular(23),
       ),
       child: Text(
@@ -129,18 +143,18 @@ class _NotificationsState extends State<Notifications> {
       ),
     );
   }
-
   Widget _buildSectionLabel(String label) {
     return Text(
       label,
       style: const TextStyle(
-        color: Color(0xFF225FFF),
+        color: AppColors.primaryColor,
         fontSize: 20,
         fontFamily: 'League Spartan',
         fontWeight: FontWeight.w400,
       ),
     );
   }
+
 
   Widget _buildNotificationItem({
     required Color avatarColor,
@@ -196,12 +210,13 @@ class _NotificationsState extends State<Notifications> {
     );
   }
 
+
   Widget _buildBottomNavigationBar() {
     return Container(
       margin: const EdgeInsets.all(12),
       height: 70,
       decoration: BoxDecoration(
-        color: const Color(0xFF225FFF),
+        color:  AppColors.primaryColor,
         borderRadius: BorderRadius.circular(30),
         boxShadow: const [
           BoxShadow(
@@ -217,12 +232,13 @@ class _NotificationsState extends State<Notifications> {
         children: [
           _buildNavBarItem(Icons.home, 0),
           _buildNavBarItem(Icons.chat_bubble_outline, 1),
-          _buildNavBarItem(Icons.person_outline, 2, hasNotification: true),
+          _buildNavBarItem(Icons.person_outline, 2),
           _buildNavBarItem(Icons.calendar_today_outlined, 3),
         ],
       ),
     );
   }
+
 
   Widget _buildNavBarItem(IconData icon, int index, {bool hasNotification = false}) {
     final bool isSelected = _currentIndex == index;
@@ -232,6 +248,18 @@ class _NotificationsState extends State<Notifications> {
         setState(() {
           _currentIndex = index;
         });
+        if(index==0){
+          Navigator.pushNamed(context, AppRoutes.home);
+        }
+        if(index==1){
+          Navigator.pushNamed(context, AppRoutes.chatlist);
+        }
+        if(index==2){
+          Navigator.pushNamed(context, AppRoutes.profile);
+        }
+        if(index==3){
+          Navigator.pushNamed(context, AppRoutes.schedule);
+        }
       },
       child: Stack(
         alignment: Alignment.center,

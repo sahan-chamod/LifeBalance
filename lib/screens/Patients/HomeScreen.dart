@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:life_balance/routes/routes.dart';
 import '../../utils/app_colors.dart';
+import 'Chat/ChatScreen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -34,8 +35,18 @@ class _HomeScreenState extends State<HomeScreen> {
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
           ],
         ),
-        actions: const [
-          Icon(Icons.notifications_none, color: AppColors.textColor, size: 28),
+        actions:  [
+          // Icon(Icons.notifications_none, color: AppColors.textColor, size: 28),
+          GestureDetector(
+            onTap: () {
+              // Navigate to the notification page when the icon is tapped
+              Navigator.pushNamed(
+                context,AppRoutes.notifications,
+                // MaterialPageRoute(builder: (context) => NotificationPage()),
+              );
+            },
+            child: Icon(Icons.notifications_none, color: AppColors.textColor, size: 28),
+          ),
           SizedBox(width: 12),
           Icon(Icons.settings, color: AppColors.textColor, size: 28),
           SizedBox(width: 12),
@@ -102,9 +113,14 @@ class _HomeScreenState extends State<HomeScreen> {
         setState(() {
           _currentIndex = index;
         });
-
+        if(index==1){
+          Navigator.pushNamed(context, AppRoutes.chatlist);
+        }
         if(index==2){
           Navigator.pushNamed(context, AppRoutes.profile);
+        }
+        if(index==3){
+          Navigator.pushNamed(context, AppRoutes.schedule);
         }
         print(index);
 

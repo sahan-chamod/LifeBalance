@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:life_balance/utils/app_colors.dart';
+import 'package:life_balance/routes/routes.dart';
+
+
 
 class Schedule extends StatefulWidget {
   const Schedule({Key? key}) : super(key: key);
@@ -82,7 +85,7 @@ class _ScheduleState extends State<Schedule> {
           children: [
             _buildNavBarItem(Icons.home, 0),
             _buildNavBarItem(Icons.chat_bubble_outline, 1),
-            _buildNavBarItem(Icons.person_outline, 2, hasNotification: true),
+            _buildNavBarItem(Icons.person_outline, 2),
             _buildNavBarItem(Icons.calendar_today_outlined, 3),
           ],
         ),
@@ -139,7 +142,7 @@ class _ScheduleState extends State<Schedule> {
     return SizedBox(
       height: 90,
       child: Container(
-        color: AppColors.hintColor,
+        color: AppColors.secondaryColor,
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
           itemCount: 7,
@@ -386,6 +389,18 @@ class _ScheduleState extends State<Schedule> {
         setState(() {
           _currentIndex = index;
         });
+        if(index==0){
+          Navigator.pushNamed(context, AppRoutes.home);
+        }
+        if(index==1){
+          Navigator.pushNamed(context, AppRoutes.chatlist);
+        }
+        if(index==2){
+          Navigator.pushNamed(context, AppRoutes.profile);
+        }
+        if(index==3){
+          Navigator.pushNamed(context, AppRoutes.schedule);
+        }
       },
       child: Column(
         mainAxisSize: MainAxisSize.min,
