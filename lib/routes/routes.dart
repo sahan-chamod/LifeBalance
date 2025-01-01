@@ -56,6 +56,7 @@ class AppRoutes {
   static const String addReportHistory = '/addReportHistory';
   static const String chatlist = '/chatlist';
 
+  static const String doctorsScreen = './doctorsScreen';
   static const String appoinments = '/appoinments';
   static const String doctorInfo = '/doctorInfo';
   static const String doctorRating = './doctorRating';
@@ -71,7 +72,7 @@ class AppRoutes {
       case home:
         return MaterialPageRoute(builder: (_) => const HomeScreen());
       case doctorHome:
-        return MaterialPageRoute(builder: (_) => const DoctorsScreen());
+        return MaterialPageRoute(builder: (_) => const DoctorHomeScreen());
       case adminHome:
         return MaterialPageRoute(builder: (_) => const AdminHomeScreen());
       case profile:
@@ -121,6 +122,8 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => ReviewScreen());
       case favoriteScreen:
         return MaterialPageRoute(builder: (_) => FavoriteScreen());
+      case doctorsScreen:
+        return MaterialPageRoute(builder: (_) => DoctorsScreen());
       default:
         return MaterialPageRoute(builder: (_) => const LoginScreen());
        
