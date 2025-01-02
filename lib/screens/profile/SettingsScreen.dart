@@ -57,11 +57,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         title: 'Password Manager',
                         route: AppRoutes.password,
                       ),
-                      CustomListTitle(
-                        icon: Icons.delete,
-                        title: 'Delete Account',
-                        route: AppRoutes.password,
-                      ),
+                      // CustomListTitle(
+                      //   icon: Icons.delete,
+                      //   title: 'Delete Account',
+                      //   route: AppRoutes.password,
+                      // ),
                     ],
                   )
                 ],
