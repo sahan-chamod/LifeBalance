@@ -82,23 +82,23 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: Column(
         children: [
-          _buildTopSection(),
+          _buildTopSection(context),
           _buildDateScrollView(),
           _buildTodaySection(),
           Expanded(
             child: ListView(
               children: [
-                _buildDoctorCard('assets/images/doctor1.jpg',
-                    "Dr. Olivia Turner, M.D.", "Dermato-Endocrinology", 5.0),
-                _buildDoctorCard('assets/images/doctor2.jpg',
-                    "Dr. Alexander Bennett, Ph.D.", "Dermato-Granulese", 4.5),
-                _buildDoctorCard(
+                _buildDoctorCard(context,'assets/images/doctor1.jpg',
+                    "Dr. Olivia Turner, M.D.", "Dermato-Endocrinology", 5.0,0),
+                _buildDoctorCard(context,'assets/images/doctor2.jpg',
+                    "Dr. Alexander Bennett, Ph.D.", "Dermato-Granulese", 4.5,1),
+                _buildDoctorCard(context,
                     'assets/images/doctor3.jpg',
                     "Dr. Sophia Martinez, Ph.D.",
                     "Cosmetic Bioengineering",
-                    5.0),
-                _buildDoctorCard('assets/images/doctor4.jpg',
-                    "Dr. Michael Davidson, M.D.", "Nano-Dermatology", 4.8),
+                    5.0,2),
+                _buildDoctorCard(context,'assets/images/doctor4.jpg',
+                    "Dr. Michael Davidson, M.D.", "Nano-Dermatology", 4.8,3),
               ],
             ),
           ),
@@ -148,7 +148,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Navigator.pushNamed(context, AppRoutes.profile);
         }
         if(index==3){
-          Navigator.pushNamed(context, AppRoutes.schedule);
+          Navigator.pushNamed(context, AppRoutes.appoinments);
         }
         print(index);
 
@@ -185,14 +185,14 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-Widget _buildTopSection() {
+Widget _buildTopSection(BuildContext context) {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
     child: Row(
       children: [
-        _buildTopButton(Icons.favorite_border, "Doctors"),
+        _buildTopButton(context, Icons.favorite_border, "Doctors",0),
         const SizedBox(width: 12),
-        _buildTopButton(Icons.star_border, "Favorite"),
+        _buildTopButton(context, Icons.star_border, "Favorite",1),
         const SizedBox(width: 12),
         Expanded(
           child: TextField(
@@ -213,20 +213,32 @@ Widget _buildTopSection() {
   );
 }
 
-Widget _buildTopButton(IconData icon, String label) {
-  return Column(
-    children: [
-      CircleAvatar(
-        backgroundColor: AppColors.buttonColor,
-        radius: 24,
-        child: Icon(icon, color: AppColors.buttonTextColor, size: 24),
-      ),
-      const SizedBox(height: 4),
-      Text(label,
-          style: const TextStyle(fontSize: 12, color: AppColors.textColor)),
-    ],
+Widget _buildTopButton(BuildContext context, IconData icon, String label, int index) {
+  return GestureDetector(
+    onTap: () {
+      if (index == 0) {
+        Navigator.pushNamed(context, AppRoutes.doctorsScreen);
+      } else if (index == 1) {
+        Navigator.pushNamed(context, AppRoutes.favoriteScreen);
+      }
+    },
+    child: Column(
+      children: [
+        CircleAvatar(
+          backgroundColor: AppColors.buttonColor,
+          radius: 24,
+          child: Icon(icon, color: AppColors.buttonTextColor, size: 24),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          label,
+          style: const TextStyle(fontSize: 12, color: AppColors.textColor),
+        ),
+      ],
+    ),
   );
 }
+
 
 Widget _buildDateScrollView() {
   return SizedBox(
@@ -282,9 +294,20 @@ Widget _buildTodaySection() {
   );
 }
 
-Widget _buildDoctorCard(
-    String imagePath, String name, String specialty, double rating) {
-  return Card(
+Widget _buildDoctorCard(BuildContext context,
+    String imagePath, String name, String specialty, double rating,int index) {
+  return GestureDetector(
+      onTap: () {
+        if (index == 0) {
+          Navigator.pushNamed(context, AppRoutes.doctorInfo);
+        } else if (index == 1) {
+          // Navigator.pushNamed(context, AppRoutes.favoriteScreen);
+        } else if(index ==2){
+
+        }
+      },
+  child: Card(
+    color: AppColors.secondaryColor,
     margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
     elevation: 3,
@@ -309,5 +332,6 @@ Widget _buildDoctorCard(
         ],
       ),
     ),
-  );
+  ),
+        );
 }

@@ -1,8 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:life_balance/utils/app_colors.dart';
 import 'package:life_balance/routes/routes.dart';
+import 'package:intl/intl.dart';
 
-
+import '../../../firebase/notification_helper.dart';
+import '../Chat/ChatScreen.dart';
 
 class Schedule extends StatefulWidget {
   const Schedule({Key? key}) : super(key: key);
@@ -12,9 +16,14 @@ class Schedule extends StatefulWidget {
 }
 
 class _ScheduleState extends State<Schedule> {
-  int _selectedDateIndex = 2;
+  int _selectedDateIndex = -1;
   int _selectedTimeIndex = -1;
   int _currentIndex = 1;
+  DateTime currentDate = DateTime.now();
+  final NotificationsHelper _notificationsHelper = NotificationsHelper();
+
+
+  final List<DateTime> _daysOfMonth = [];
 
   // Available time slots
   final List<String> timeSlots = [
@@ -30,6 +39,80 @@ class _ScheduleState extends State<Schedule> {
     "3:30 PM",
     "4:00 PM",
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _generateDaysOfMonth();
+  }
+
+  void _generateDaysOfMonth() {
+    final firstDayOfMonth = DateTime(currentDate.year, currentDate.month, 1);
+    final lastDayOfMonth = DateTime(currentDate.year, currentDate.month + 1, 0);
+
+    for (int i = 0; i < lastDayOfMonth.day; i++) {
+      _daysOfMonth.add(firstDayOfMonth.add(Duration(days: i)));
+    }
+
+    _selectedDateIndex = _daysOfMonth.indexWhere((date) =>
+    date.day == currentDate.day &&
+        date.month == currentDate.month &&
+        date.year == currentDate.year);
+  }
+
+  void _createAppointment() async {
+    if (_selectedDateIndex == -1 || _selectedTimeIndex == -1) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please select a date and time.')),
+      );
+      return;
+    }
+
+    final selectedDate = _daysOfMonth[_selectedDateIndex];
+    final selectedTime = timeSlots[_selectedTimeIndex];
+    final combinedDateTime = DateFormat('yyyy-MM-dd hh:mm a').parse(
+      "${DateFormat('yyyy-MM-dd').format(selectedDate)} $selectedTime",
+    );
+    final userId = "currentUserId"; // Replace with actual user ID from auth
+    final doctorId = "Dr. Olivia Turner, M.D."; // Replace with actual doctor ID
+
+    try {
+      await FirebaseFirestore.instance
+          .collection('appointments')
+          // .doc(userId)
+          // .collection('userAppointments')
+          .add({
+        'appointmentDate': combinedDateTime.toIso8601String(),
+        'doctorId': doctorId,
+        'userId': userId,
+        'status': 'upcoming',
+      });
+      await sendScheduleNotification(doctorId, combinedDateTime.toIso8601String());
+
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Appointment created successfully!')),
+      );
+      Navigator.pop(context);
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: ${e.toString()}')),
+      );
+    }
+  }
+  Future<void> sendScheduleNotification(String doctorName, String appointmentDate) async {
+    final currentUserId = FirebaseAuth.instance.currentUser?.uid;
+    if (currentUserId == null) {
+      throw Exception("User is not authenticated.");
+    }
+
+    final Map<String, dynamic> scheduleNotification = {
+      'title': 'Appointment Scheduled',
+      'description': 'Your appointment with $doctorName on $appointmentDate has been confirmed.',
+    };
+
+    await _notificationsHelper.saveNotification(currentUserId, scheduleNotification);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,9 +142,25 @@ class _ScheduleState extends State<Schedule> {
               // Problem Description Section
               _buildProblemDescription(),
 
+              // Proceed Button
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 10),
+                child: ElevatedButton(
+                  onPressed: _createAppointment,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primaryColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    minimumSize: const Size(double.infinity, 50),
+                  ),
+                  child: const Text('Proceed',
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                ),
+              ),
             ],
           ),
-      ),
+        ),
       ),
 
       // Bottom Navigation Bar
@@ -93,6 +192,61 @@ class _ScheduleState extends State<Schedule> {
     );
   }
 
+  Widget _buildDateScrollView() {
+    return SizedBox(
+      height: 90,
+      child: Container(
+        color: AppColors.secondaryColor,
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: _daysOfMonth.length,
+          itemBuilder: (context, index) {
+            bool isSelected = index == _selectedDateIndex;
+            final date = _daysOfMonth[index];
+            return GestureDetector(
+              onTap: () {
+                setState(() {
+                  _selectedDateIndex = index;
+                });
+              },
+              child: Container(
+                margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10.0),
+                padding: const EdgeInsets.all(10.0),
+                decoration: BoxDecoration(
+                  color: isSelected
+                      ? AppColors.primaryColor
+                      : AppColors.inputBackground,
+                  borderRadius: BorderRadius.circular(12.0),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "${date.day}",
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: isSelected
+                              ? AppColors.buttonTextColor
+                              : Colors.black),
+                    ),
+                    Text(
+                      DateFormat('E').format(date).toUpperCase(),
+                      style: TextStyle(
+                          fontSize: 14,
+                          color: isSelected
+                              ? AppColors.buttonTextColor
+                              : Colors.black),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
   Widget _buildHeader() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
@@ -127,7 +281,19 @@ class _ScheduleState extends State<Schedule> {
           Row(
             children: [
               const SizedBox(width: 8),
-              Icon(Icons.message, color: AppColors.primaryColor, size: 28),
+              IconButton(icon: Icon( Icons.chat, color: AppColors.primaryColor, size: 28),
+                  onPressed:(){
+                    Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Chat(
+                                // doctorId: 'yKYJAuW5jaSKm11dWFWl9nIfoe52',
+                                doctorId: 'lmOjGXn7ZoMmTJQeLZrYY9nY5rE3',
+
+                              ),
+                            ),
+                          );
+                        }),
               const SizedBox(width: 8),
               Icon(Icons.favorite_border, color: AppColors.primaryColor, size: 28),
             ],
@@ -136,60 +302,6 @@ class _ScheduleState extends State<Schedule> {
       ),
     );
   }
-
-
-  Widget _buildDateScrollView() {
-    return SizedBox(
-      height: 90,
-      child: Container(
-        color: AppColors.secondaryColor,
-        child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: 7,
-          itemBuilder: (context, index) {
-            bool isSelected = index == _selectedDateIndex;
-            return GestureDetector(
-              onTap: () {
-                setState(() {
-                  _selectedDateIndex = index;
-                });
-              },
-              child: Container(
-                margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10.0),
-                padding: const EdgeInsets.all(10.0),
-                decoration: BoxDecoration(
-                  color: isSelected
-                      ? AppColors.primaryColor
-                      : AppColors.inputBackground,
-                  borderRadius: BorderRadius.circular(12.0),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text("${9 + index}",
-                        style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: isSelected
-                                ? AppColors.buttonTextColor
-                                : Colors.black)),
-                    Text(["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"][index],
-                        style: TextStyle(
-                            fontSize: 14,
-                            color: isSelected
-                                ? AppColors.buttonTextColor
-                                : Colors.black)),
-                  ],
-                ),
-              ),
-            );
-          },
-        ),
-      ),
-    );
-  }
-
-
   Widget _buildAvailableTime() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 5),
@@ -431,5 +543,4 @@ class _ScheduleState extends State<Schedule> {
       ),
     );
   }
-
 }

@@ -206,22 +206,6 @@ class _ChatListState extends State<ChatList> {
   }
 
   Widget _buildChatCard(Map<String, dynamic> chat) {
-    final String truncatedMessage = chat['lastMessage'] != null && chat['lastMessage'].length > 30
-        ? '${chat['lastMessage'].substring(0, 30)}...'
-        : chat['lastMessage']?? 'No messages yet';
-    String time;
-    if (chat['time'] != null && chat['time'].isNotEmpty) {
-      try {
-        final DateTime dateTime = DateTime.parse(chat['time']);
-        time = '${dateTime.hour.toString().padLeft(2, '0')}:'
-            '${dateTime.minute.toString().padLeft(2, '0')}:'
-            '${dateTime.second.toString().padLeft(2, '0')}';
-      } catch (e) {
-        time = 'Invalid time';
-      }
-    } else {
-      time = '';
-    }
     return Card(
       color: AppColors.secondaryColor,
       margin: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 8.0),
@@ -231,24 +215,11 @@ class _ChatListState extends State<ChatList> {
         contentPadding: const EdgeInsets.all(12.0),
         leading: CircleAvatar(
           radius: 30,
-          backgroundColor: Colors.blueGrey,
-          child: Text(
-            chat['participants'][0].toUpperCase(),
-            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-          ),
+          backgroundImage: AssetImage('assets/images/doctor1.jpg'),
         ),
         title: Text(
           chat['participants'],
           style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
-        ),
-        subtitle: Text(
-            truncatedMessage,
-          style: const TextStyle(color: Colors.grey),
-        ),
-        trailing: Text(
-          //
-          time,
-          style: const TextStyle(color: Colors.grey, fontSize: 12),
         ),
         onTap: () {
           Navigator.push(
