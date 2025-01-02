@@ -1,31 +1,46 @@
 import 'package:flutter/material.dart';
 
-class FavoriteScreen extends StatelessWidget {
+import '../../routes/routes.dart';
+import '../../utils/app_colors.dart';
+
+
+class FavoriteScreen extends StatefulWidget {
+  const FavoriteScreen({Key? key}) : super(key: key);
+
+  @override
+  State<FavoriteScreen> createState() => _FavoriteScreenState();
+}
+
+class _FavoriteScreenState extends State<FavoriteScreen> {
+  int _currentIndex = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.secondaryColor,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.blue),
-          onPressed: () {},
+          icon: Icon(Icons.arrow_back_ios, color: AppColors.primaryColor),
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
         title: Text(
           'Favorite',
           style: TextStyle(
-            color: Colors.blue,
+            color: AppColors.primaryColor,
             fontWeight: FontWeight.bold,
           ),
         ),
         centerTitle: true,
         actions: [
           IconButton(
-            icon: Icon(Icons.search, color: Colors.blue),
+            icon: Icon(Icons.search, color: AppColors.primaryColor),
             onPressed: () {},
           ),
           IconButton(
-            icon: Icon(Icons.swap_vert, color: Colors.blue),
+            icon: Icon(Icons.swap_vert, color: AppColors.primaryColor),
             onPressed: () {},
           ),
         ],
@@ -48,7 +63,7 @@ class FavoriteScreen extends StatelessWidget {
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
-                    color: Colors.blue.shade50,
+                    color: AppColors.primaryColor,
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: Row(
@@ -56,18 +71,18 @@ class FavoriteScreen extends StatelessWidget {
                       Text(
                         'A-Z',
                         style: TextStyle(
-                          color: Colors.blue,
+                          color: AppColors.secondaryColor,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      Icon(Icons.arrow_drop_down, color: Colors.blue),
+                      Icon(Icons.arrow_drop_down, color: AppColors.primaryColor),
                     ],
                   ),
                 ),
                 SizedBox(width: 8),
-                Icon(Icons.star, color: Colors.blue),
+                Icon(Icons.star, color: AppColors.primaryColor),
                 SizedBox(width: 8),
-                Icon(Icons.favorite, color: Colors.blue),
+                Icon(Icons.favorite, color: AppColors.primaryColor),
               ],
             ),
           ),
@@ -82,21 +97,77 @@ class FavoriteScreen extends StatelessWidget {
           ),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 0,
-        onTap: (index) {},
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home, color: Colors.blue),
-            label: '',
+      bottomNavigationBar: _buildBottomNavigationBar(context),
+    );
+  }
+  Widget _buildBottomNavigationBar(context) {
+    return Container(
+      margin: const EdgeInsets.all(12),
+      height: 70,
+      decoration: BoxDecoration(
+        color: AppColors.primaryColor,
+        borderRadius: BorderRadius.circular(30),
+        boxShadow: const [
+          BoxShadow(
+            color: Colors.black12,
+            spreadRadius: 1,
+            blurRadius: 8,
+            offset: Offset(0, 3),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person, color: Colors.grey),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_today, color: Colors.grey),
-            label: '',
+        ],
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          _buildNavBarItem(context,Icons.home, 0),
+          _buildNavBarItem(context,Icons.chat_bubble_outline, 1),
+          _buildNavBarItem(context,Icons.person_outline, 2),
+          _buildNavBarItem(context,Icons.calendar_today_outlined, 3),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildNavBarItem(BuildContext context, IconData icon, int index, {bool hasNotification = false}) {
+    return GestureDetector(
+      onTap: () {
+        if(index==0){
+          Navigator.pushNamed(context, AppRoutes.home);
+        }
+        if(index==1){
+          Navigator.pushNamed(context, AppRoutes.chatlist);
+        }
+        if(index==2){
+          Navigator.pushNamed(context, AppRoutes.profile);
+        }
+        if(index==3){
+          Navigator.pushNamed(context, AppRoutes.appoinments);
+        }
+      },
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Stack(
+            children: [
+              Icon(
+                icon,
+                size: 30,
+                color: _currentIndex == index ? Colors.white : Colors.white70,
+              ),
+              if (hasNotification)
+                Positioned(
+                  top: 0,
+                  right: 0,
+                  child: Container(
+                    width: 8,
+                    height: 8,
+                    decoration: const BoxDecoration(
+                      color: Colors.red,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                ),
+            ],
           ),
         ],
       ),
@@ -108,6 +179,7 @@ class DoctorCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: AppColors.secondaryColor,
       margin: EdgeInsets.only(bottom: 16),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       elevation: 3,
@@ -117,8 +189,8 @@ class DoctorCard extends StatelessWidget {
           children: [
             CircleAvatar(
               radius: 30,
-              backgroundImage: NetworkImage(
-                  'https://via.placeholder.com/150'), // Replace with actual image
+              backgroundImage: AssetImage(
+                  'assets/images/doctor1.jpg'), // Replace with actual image
             ),
             SizedBox(width: 16),
             Expanded(
@@ -134,7 +206,7 @@ class DoctorCard extends StatelessWidget {
                     child: Text(
                       'Professional Doctor',
                       style: TextStyle(
-                        color: Colors.blue,
+                        color: AppColors.hintColor,
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
                       ),
@@ -162,20 +234,22 @@ class DoctorCard extends StatelessWidget {
             Column(
               children: [
                 IconButton(
-                  icon: Icon(Icons.favorite_border, color: Colors.blue),
+                  icon: Icon(Icons.favorite_border, color: AppColors.hintColor),
                   onPressed: () {},
                 ),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushNamed(context, AppRoutes.schedule);
+                  },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
+                    backgroundColor: AppColors.primaryColor,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
                     ),
                   ),
                   child: Text(
                     'Make Appointment',
-                    style: TextStyle(fontSize: 12),
+                    style: TextStyle(fontSize: 12,color: AppColors.secondaryColor),
                   ),
                 ),
               ],

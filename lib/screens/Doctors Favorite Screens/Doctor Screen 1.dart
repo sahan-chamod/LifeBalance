@@ -1,26 +1,23 @@
 import 'package:flutter/material.dart';
 
-void main() => runApp(const MyApp());
+import '../../routes/routes.dart';
+import '../../utils/app_colors.dart';
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+
+class DoctorsScreen extends StatefulWidget {
+  const DoctorsScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: const DoctorsScreen(),
-    );
-  }
+  State<DoctorsScreen> createState() => _DoctorsScreenState();
 }
 
-class DoctorsScreen extends StatelessWidget {
-  const DoctorsScreen({Key? key}) : super(key: key);
+class _DoctorsScreenState extends State<DoctorsScreen> {
+  int _currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF4F6F9),
+      backgroundColor: AppColors.secondaryColor,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
@@ -33,10 +30,15 @@ class DoctorsScreen extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-        leading: const Icon(Icons.arrow_back_ios, color: Colors.black),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios, color: AppColors.primaryColor),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
         actions: [
           IconButton(
-            icon: const 
+            icon: const
             Icon(Icons.search, color: Colors.black),
             onPressed: () {},
           ),
@@ -75,7 +77,9 @@ class DoctorsScreen extends StatelessWidget {
                   ),
                 ),
                 const Spacer(),
-                const Icon(Icons.star_border, color: Colors.grey),
+                IconButton(onPressed: (){
+                  Navigator.pushNamed(context, AppRoutes.doctorRating);
+                },icon: Icon(Icons.star_border, color: Colors.grey))
               ],
             ),
           ),
@@ -89,22 +93,22 @@ class DoctorsScreen extends StatelessWidget {
                   DoctorCard(
                     name: 'Dr. Alexander Bennett, Ph.D.',
                     specialty: 'Dermato-Genetics',
-                    imagePath: 'assets/doctor1.png',
+                    imagePath: 'assets/images/doctor3.jpg',
                   ),
                   DoctorCard(
                     name: 'Dr. Michael Davidson, M.D.',
                     specialty: 'Solar Dermatology',
-                    imagePath: 'assets/doctor2.png',
+                    imagePath: 'assets/images/doctor2.jpg',
                   ),
                   DoctorCard(
                     name: 'Dr. Olivia Turner, M.D.',
                     specialty: 'Dermato-Endocrinology',
-                    imagePath: 'assets/doctor3.png',
+                    imagePath: 'assets/images/doctor1.jpg',
                   ),
                   DoctorCard(
                     name: 'Dr. Sophia Martinez, Ph.D.',
                     specialty: 'Cosmetic Bioengineering',
-                    imagePath: 'assets/doctor4.png',
+                    imagePath: 'assets/images/doctor4.jpg',
                   ),
                 ],
               ),
@@ -112,32 +116,84 @@ class DoctorsScreen extends StatelessWidget {
           ),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: const Color(0xFF2260FF),
-        unselectedItemColor: Colors.grey,
-        currentIndex: 0,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined),
-            label: '',
+      bottomNavigationBar: _buildBottomNavigationBar(context),
+    );
+  }
+  Widget _buildBottomNavigationBar(context) {
+    return Container(
+      margin: const EdgeInsets.all(12),
+      height: 70,
+      decoration: BoxDecoration(
+        color: AppColors.primaryColor,
+        borderRadius: BorderRadius.circular(30),
+        boxShadow: const [
+          BoxShadow(
+            color: Colors.black12,
+            spreadRadius: 1,
+            blurRadius: 8,
+            offset: Offset(0, 3),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.chat_bubble_outline),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_today_outlined),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline),
-            label: '',
+        ],
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          _buildNavBarItem(context,Icons.home, 0),
+          _buildNavBarItem(context,Icons.chat_bubble_outline, 1),
+          _buildNavBarItem(context,Icons.person_outline, 2),
+          _buildNavBarItem(context,Icons.calendar_today_outlined, 3),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildNavBarItem(BuildContext context, IconData icon, int index, {bool hasNotification = false}) {
+    return GestureDetector(
+      onTap: () {
+        if(index==0){
+          Navigator.pushNamed(context, AppRoutes.home);
+        }
+        if(index==1){
+          Navigator.pushNamed(context, AppRoutes.chatlist);
+        }
+        if(index==2){
+          Navigator.pushNamed(context, AppRoutes.profile);
+        }
+        if(index==3){
+          Navigator.pushNamed(context, AppRoutes.appoinments);
+        }
+      },
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Stack(
+            children: [
+              Icon(
+                icon,
+                size: 30,
+                color: _currentIndex == index ? Colors.white : Colors.white70,
+              ),
+              if (hasNotification)
+                Positioned(
+                  top: 0,
+                  right: 0,
+                  child: Container(
+                    width: 8,
+                    height: 8,
+                    decoration: const BoxDecoration(
+                      color: Colors.red,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                ),
+            ],
           ),
         ],
       ),
     );
   }
 }
+
 
 class DoctorCard extends StatelessWidget {
   final String name;
@@ -157,7 +213,7 @@ class DoctorCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.secondaryColor,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -204,7 +260,9 @@ class DoctorCard extends StatelessWidget {
                 Row(
                   children: [
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushNamed(context, AppRoutes.doctorInfo);
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF2260FF),
                         padding:
