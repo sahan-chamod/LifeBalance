@@ -1,21 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:life_balance/routes/routes.dart';
 
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(primarySwatch: Colors.blue),
-      home: const DoctorInfoScreen(),
-    );
-  }
-}
+import '../../utils/app_colors.dart';
 
 class DoctorInfoScreen extends StatefulWidget {
   const DoctorInfoScreen({Key? key}) : super(key: key);
@@ -26,29 +12,36 @@ class DoctorInfoScreen extends StatefulWidget {
 
 class _DoctorInfoScreenState extends State<DoctorInfoScreen> {
   String _sortBy = 'A-Z'; // Default sort option
-  int _selectedIndex = 0; // BottomNavigationBar selected index
+  int _currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.secondaryColor,
       appBar: AppBar(
+        backgroundColor: AppColors.secondaryColor,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back_ios,color: AppColors.primaryColor),
           onPressed: () {
-            // Go back or handle navigation
+            Navigator.pop(context);
           },
         ),
-        title: const Text('Doctor Info'),
+        title: const Text('Doctor Info',
+        style: TextStyle(
+          color: AppColors.primaryColor,
+          fontWeight: FontWeight.bold,
+        ),
+        ),
         centerTitle: true,
         actions: [
           IconButton(
-            icon: const Icon(Icons.search),
+            icon: const Icon(Icons.search,color: AppColors.primaryColor),
             onPressed: () {
               // Handle search action
             },
           ),
           IconButton(
-            icon: const Icon(Icons.share),
+            icon: const Icon(Icons.share,color: AppColors.primaryColor),
             onPressed: () {
               // Handle share action
             },
@@ -67,7 +60,7 @@ class _DoctorInfoScreenState extends State<DoctorInfoScreen> {
                 children: [
                   const Text(
                     'Sort By',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600,color: AppColors.primaryColor),
                   ),
                   DropdownButton<String>(
                     value: _sortBy,
@@ -88,6 +81,7 @@ class _DoctorInfoScreenState extends State<DoctorInfoScreen> {
               const SizedBox(height: 16),
               // Doctor Card Section
               Card(
+                color: AppColors.secondaryColor,
                 elevation: 4,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),
@@ -102,7 +96,7 @@ class _DoctorInfoScreenState extends State<DoctorInfoScreen> {
                           // Doctor Image
                           CircleAvatar(
                             radius: 40,
-                            backgroundImage: AssetImage('assets/doctor.jpg'),
+                            backgroundImage: AssetImage('assets/images/doctor1.jpg'),
                             backgroundColor: Colors.grey[200], // Placeholder color
                           ),
                           const SizedBox(width: 16),
@@ -117,7 +111,7 @@ class _DoctorInfoScreenState extends State<DoctorInfoScreen> {
                                     vertical: 4.0,
                                   ),
                                   decoration: BoxDecoration(
-                                    color: Colors.blue,
+                                    color: AppColors.primaryColor,
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   child: const Text(
@@ -135,14 +129,14 @@ class _DoctorInfoScreenState extends State<DoctorInfoScreen> {
                                 ),
                                 const SizedBox(height: 8),
                                 const Text(
-                                  'Dr. Alexander Bennett, Ph.D.',
+                                  'Dr. Olivia Turner, M.D.',
                                   style: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
                                 const Text(
-                                  'Dermato-Genetics',
+                                  'Dermato-Endocrinology',
                                   style: TextStyle(fontSize: 14),
                                 ),
                               ],
@@ -156,32 +150,50 @@ class _DoctorInfoScreenState extends State<DoctorInfoScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Column(
-                            children: const [
-                              Icon(Icons.star, color: Colors.amber),
-                              SizedBox(height: 4),
-                              Text('5'),
+                            children: [
+                              Row(
+                                children: const [
+                                  Icon(Icons.star, color: Colors.amber, size: 16), // Adjusted icon size
+                                  SizedBox(width: 4), // Spacing between icon and text
+                                  Text('5', style: TextStyle(fontSize: 14)), // Adjusted text size
+                                ],
+                              ),
                             ],
                           ),
                           Column(
-                            children: const [
-                              Icon(Icons.comment, color: Colors.grey),
-                              SizedBox(height: 4),
-                              Text('40'),
+                            children: [
+                              Row(
+                                children: const [
+                                  Icon(Icons.comment, color: Colors.grey, size: 16),
+                                  SizedBox(width: 4),
+                                  Text('40', style: TextStyle(fontSize: 14)),
+                                ],
+                              ),
                             ],
                           ),
                           Column(
-                            children: const [
-                              Icon(Icons.access_time, color: Colors.grey),
-                              SizedBox(height: 4),
-                              Text('Mon-Sat\n9:00AM - 5:00PM'),
+                            children: [
+                              Row(
+                                children: const [
+                                  Icon(Icons.access_time, color: Colors.grey, size: 16),
+                                  SizedBox(width: 4),
+                                  Text('Mon-Sat\n9:00AM - 5:00PM', style: TextStyle(fontSize: 12)),
+                                ],
+                              ),
                             ],
                           ),
                           ElevatedButton(
-                            onPressed: () {
-                              // Handle scheduling action
-                            },
-                            child: const Text('Schedule'),
-                          ),
+                              onPressed: () {
+                                // Handle scheduling action
+                                Navigator.pushNamed(context, AppRoutes.schedule);
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColors.primaryColor,
+                              ),
+                              child: const Text('Schedule',
+                                style: TextStyle(color: AppColors.secondaryColor),
+                              ),
+                            ),
                         ],
                       ),
                     ],
@@ -222,20 +234,79 @@ class _DoctorInfoScreenState extends State<DoctorInfoScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.chat), label: 'Chat'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.calendar_today), label: 'Schedule'),
+      bottomNavigationBar: _buildBottomNavigationBar(context),
+    );
+  }
+  Widget _buildBottomNavigationBar(context) {
+    return Container(
+      margin: const EdgeInsets.all(12),
+      height: 70,
+      decoration: BoxDecoration(
+        color: AppColors.primaryColor,
+        borderRadius: BorderRadius.circular(30),
+        boxShadow: const [
+          BoxShadow(
+            color: Colors.black12,
+            spreadRadius: 1,
+            blurRadius: 8,
+            offset: Offset(0, 3),
+          ),
         ],
-        currentIndex: _selectedIndex,
-        onTap: (index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-        },
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          _buildNavBarItem(context,Icons.home, 0),
+          _buildNavBarItem(context,Icons.chat_bubble_outline, 1),
+          _buildNavBarItem(context,Icons.person_outline, 2),
+          _buildNavBarItem(context,Icons.calendar_today_outlined, 3),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildNavBarItem(BuildContext context, IconData icon, int index, {bool hasNotification = false}) {
+    return GestureDetector(
+      onTap: () {
+        if(index==0){
+          Navigator.pushNamed(context, AppRoutes.home);
+        }
+        if(index==1){
+          Navigator.pushNamed(context, AppRoutes.chatlist);
+        }
+        if(index==2){
+          Navigator.pushNamed(context, AppRoutes.profile);
+        }
+        if(index==3){
+          Navigator.pushNamed(context, AppRoutes.appoinments);
+        }
+      },
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Stack(
+            children: [
+              Icon(
+                icon,
+                size: 30,
+                color: _currentIndex == index ? Colors.white : Colors.white70,
+              ),
+              if (hasNotification)
+                Positioned(
+                  top: 0,
+                  right: 0,
+                  child: Container(
+                    width: 8,
+                    height: 8,
+                    decoration: const BoxDecoration(
+                      color: Colors.red,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ],
       ),
     );
   }
