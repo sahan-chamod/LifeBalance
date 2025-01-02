@@ -46,6 +46,7 @@ class _ReportHistoryScreenState extends State<ReportHistoryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.secondaryColor,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(20),

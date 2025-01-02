@@ -49,6 +49,7 @@ class _MediAlegicScreenState extends State<MediAlegicScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.secondaryColor,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(20.0),

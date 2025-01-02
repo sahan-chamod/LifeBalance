@@ -14,6 +14,7 @@ class _SettingsScreenState extends State<CustomerHistoryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.secondaryColor,
       body: SafeArea(
           child:SingleChildScrollView(
             child: Padding(
