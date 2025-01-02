@@ -1,72 +1,72 @@
 import 'package:flutter/material.dart';
 
-void main() => runApp(const MyApp());
+import '../../routes/routes.dart';
+import '../../utils/app_colors.dart';
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+
+class RatingScreen extends StatefulWidget {
+  const RatingScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: RatingScreen(),
-    );
-  }
+  State<RatingScreen> createState() => _RatingScreenState();
 }
 
-class RatingScreen extends StatelessWidget {
-  RatingScreen({Key? key}) : super(key: key);
+class _RatingScreenState extends State<RatingScreen> {
+  int _currentIndex = 0;
 
   final List<Map<String, dynamic>> doctors = [
     {
       'name': 'Dr. Olivia Turner, M.D.',
       'specialty': 'Dermato-Endocrinology',
       'rating': 5.0,
-      'image': 'https://via.placeholder.com/50',
+      'image': 'assets/images/doctor1.jpg',
     },
     {
       'name': 'Dr. Alexander Bennett, Ph.D.',
       'specialty': 'Dermato-Genetics',
       'rating': 5.0,
-      'image': 'https://via.placeholder.com/50',
+      'image': 'assets/images/doctor2.jpg',
     },
     {
       'name': 'Dr. Sophia Martinez, Ph.D.',
       'specialty': 'Cosmetic Bioengineering',
       'rating': 4.9,
-      'image': 'https://via.placeholder.com/50',
+      'image': 'assets/images/doctor3.jpg',
     },
     {
       'name': 'Dr. Michael Davidson, M.D.',
       'specialty': 'Solar Dermatology',
       'rating': 4.8,
-      'image': 'https://via.placeholder.com/50',
+      'image': 'assets/images/doctor4.jpg',
     },
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.secondaryColor,
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.white,
         foregroundColor: Colors.blue,
         title: const Text(
           'Rating',
-          style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+          style: TextStyle(color: AppColors.primaryColor, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {},
+          icon: const Icon(Icons.arrow_back_ios,color: AppColors.primaryColor),
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.search),
+            icon: const Icon(Icons.search,color: AppColors.primaryColor),
             onPressed: () {},
           ),
           IconButton(
-            icon: const Icon(Icons.filter_alt_outlined),
+            icon: const Icon(Icons.filter_alt_outlined,color: AppColors.primaryColor),
             onPressed: () {},
           ),
         ],
@@ -83,13 +83,13 @@ class RatingScreen extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: Colors.black87,
+                    color: AppColors.primaryColor,
                   ),
                 ),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
-                    color: Colors.blue.withOpacity(0.1),
+                    color: AppColors.primaryColor.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: const Row(
@@ -98,12 +98,12 @@ class RatingScreen extends StatelessWidget {
                         'A - Z',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          color: Colors.blue,
+                          color: AppColors.primaryColor,
                         ),
                       ),
                       Icon(
                         Icons.arrow_drop_down,
-                        color: Colors.blue,
+                        color: AppColors.primaryColor,
                       ),
                     ],
                   ),
@@ -127,21 +127,86 @@ class RatingScreen extends StatelessWidget {
           ),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: Colors.blue,
-        unselectedItemColor: Colors.grey,
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-          BottomNavigationBarItem(icon: Icon(Icons.group), label: 'Doctors'),
-          BottomNavigationBarItem(icon: Icon(Icons.calendar_today), label: 'Calendar'),
-        ],
-      ),
+      bottomNavigationBar: _buildBottomNavigationBar(context),
     );
   }
+
+Widget _buildBottomNavigationBar(context) {
+  return Container(
+    margin: const EdgeInsets.all(12),
+    height: 70,
+    decoration: BoxDecoration(
+      color: AppColors.primaryColor,
+      borderRadius: BorderRadius.circular(30),
+      boxShadow: const [
+        BoxShadow(
+          color: Colors.black12,
+          spreadRadius: 1,
+          blurRadius: 8,
+          offset: Offset(0, 3),
+        ),
+      ],
+    ),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        _buildNavBarItem(context,Icons.home, 0),
+        _buildNavBarItem(context,Icons.chat_bubble_outline, 1),
+        _buildNavBarItem(context,Icons.person_outline, 2),
+        _buildNavBarItem(context,Icons.calendar_today_outlined, 3),
+      ],
+    ),
+  );
 }
+
+Widget _buildNavBarItem(BuildContext context, IconData icon, int index, {bool hasNotification = false}) {
+  return GestureDetector(
+    onTap: () {
+      if(index==0){
+        Navigator.pushNamed(context, AppRoutes.home);
+      }
+      if(index==1){
+        Navigator.pushNamed(context, AppRoutes.chatlist);
+      }
+      if(index==2){
+        Navigator.pushNamed(context, AppRoutes.profile);
+      }
+      if(index==3){
+        Navigator.pushNamed(context, AppRoutes.appoinments);
+      }
+    },
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Stack(
+          children: [
+            Icon(
+              icon,
+              size: 30,
+              color: _currentIndex == index ? Colors.white : Colors.white70,
+            ),
+            if (hasNotification)
+              Positioned(
+                top: 0,
+                right: 0,
+                child: Container(
+                  width: 8,
+                  height: 8,
+                  decoration: const BoxDecoration(
+                    color: Colors.red,
+                    shape: BoxShape.circle,
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ],
+    ),
+  );
+}
+}
+
+
 
 class DoctorCard extends StatelessWidget {
   final String name;
@@ -160,6 +225,7 @@ class DoctorCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: AppColors.secondaryColor,
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
@@ -170,7 +236,7 @@ class DoctorCard extends StatelessWidget {
           children: [
             CircleAvatar(
               radius: 30,
-              backgroundImage: NetworkImage(imageUrl),
+              backgroundImage: AssetImage(imageUrl),
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -200,7 +266,7 @@ class DoctorCard extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
-                    color: Colors.blue,
+                    color: AppColors.primaryColor,
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Row(
@@ -222,15 +288,15 @@ class DoctorCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     IconButton(
-                      icon: const Icon(Icons.info, color: Colors.blue),
+                      icon: const Icon(Icons.info, color: AppColors.primaryColor),
                       onPressed: () {},
                     ),
                     IconButton(
-                      icon: const Icon(Icons.calendar_today, color: Colors.blue),
+                      icon: const Icon(Icons.calendar_today, color: AppColors.primaryColor),
                       onPressed: () {},
                     ),
                     IconButton(
-                      icon: const Icon(Icons.favorite_border, color: Colors.blue),
+                      icon: const Icon(Icons.favorite_border, color: AppColors.primaryColor),
                       onPressed: () {},
                     ),
                   ],
