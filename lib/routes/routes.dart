@@ -12,6 +12,8 @@ import 'package:life_balance/screens/profile/reports/ReportHistoryScreen.dart';
 import '../screens/Loginscreen.dart';
 import '../screens/Patients/payment/AddCardScreen.dart';
 import '../screens/Patients/payment/PaymentMethodApp.dart';
+import '../screens/Patients/payment/PaymentScreen.dart';
+import '../screens/Patients/payment/PaymentSuccessScreen.dart';
 import '../screens/Signupscreen.dart';
 import '../screens/Patients/HomeScreen.dart';
 import '../screens/admin/AdminHome.dart';
@@ -30,7 +32,6 @@ import '../screens/Doctors Favorite Screens/Doctor Screen 3.dart';
 import '../screens/Doctors Favorite Screens/Doctor Screen 4.dart';
 import '../screens/Doctors Favorite Screens/Review screen.dart';
 import '../screens/Splash Screen/SplashScreen.dart';
-
 
 class AppRoutes {
   static const String login = '/login';
@@ -101,7 +102,7 @@ class AppRoutes {
         return MaterialPageRoute(
             builder: (_) => const AddFoodAllergiesScreen());
       case chat:
-        return MaterialPageRoute(builder: (_) =>  Chat());
+        return MaterialPageRoute(builder: (_) => Chat());
       case notifications:
         return MaterialPageRoute(builder: (_) => const Notifications());
       case schedule:
@@ -130,13 +131,12 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => DoctorsScreen());
       case splashScreen:
         return MaterialPageRoute(builder: (_) => Splashscreen());
-          case paymentscreen:
+      case paymentscreen:
         return MaterialPageRoute(builder: (_) => PaymentScreen());
-          case paymentsuccess:
+      case paymentsuccess:
         return MaterialPageRoute(builder: (_) => PaymentSuccessScreen());
       default:
         return MaterialPageRoute(builder: (_) => const LoginScreen());
-       
     }
   }
 }
