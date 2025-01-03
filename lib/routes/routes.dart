@@ -65,7 +65,7 @@ class AppRoutes {
   static const String reviewScreen = './reviewScreen';
   static const String splashScreen = './splashScreen';
   static const String paymentscreen = './paymentscreen';
-  static const String paymentsuccess = './paymentsuccess'
+  static const String paymentsuccess = './paymentsuccess';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
