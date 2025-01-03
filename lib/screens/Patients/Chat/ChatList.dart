@@ -70,6 +70,11 @@ class _ChatListState extends State<ChatList> {
     return Scaffold(
       backgroundColor: Colors.white,
       bottomNavigationBar: _buildBottomNavigationBar(),
+      appBar: PreferredSize(preferredSize: const Size.fromHeight(0),
+        child: AppBar(
+          backgroundColor: AppColors.secondaryColor,
+        ),
+      ),
       body: Column(
         children: [
           _buildHeader(),
