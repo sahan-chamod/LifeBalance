@@ -47,8 +47,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
-  Future <void> logout()async{
+  Future <void> logout(BuildContext context)async{
     await _firebaseService.logoutUser();
+    userProvider.logOut();
+    Navigator.pushNamed(context, AppRoutes.signUp);
   }
 
   // Future<void> _loadImage(String? url) async {
@@ -195,8 +197,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
         if(index==0){
           Navigator.pushNamed(context, AppRoutes.home);
         }
+        if(index==1){
+          Navigator.pushNamed(context, AppRoutes.chatlist);
+        }
         if(index==2){
           Navigator.pushNamed(context, AppRoutes.profile);
+        }
+        if(index==3){
+          Navigator.pushNamed(context, AppRoutes.appoinments);
         }
 
       },
@@ -297,7 +305,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       SizedBox(width: 20,),
                       Expanded(child: ElevatedButton(
                         onPressed: ()async {
-                        await  logout();
+                        await  logout(context);
                           Navigator.of(context).pop();
                           Navigator.of(context).pushNamed(AppRoutes.login);
                         },

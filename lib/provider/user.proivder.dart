@@ -8,6 +8,8 @@ class UserProvider with ChangeNotifier {
   String? mobileNumber;
   String profileImage="";
 
+
+
   User? get user => _user;
 
   Future<void> updateUser(String newDisplayName, String phoneNumber, String dob,BuildContext context) async {
@@ -43,11 +45,16 @@ class UserProvider with ChangeNotifier {
   }
   
   Future<void>userOtherDetails()async{
+    _user= FirebaseAuth.instance.currentUser;
     final userRef = FirebaseFirestore.instance.collection('users').doc(_user?.uid);
+
     DocumentSnapshot docSnapshot = await userRef.get();
+
+    print('$_user data');
 
     if (docSnapshot.exists) {
       var data = docSnapshot.data() as Map<String, dynamic>;
+
       dateOfBirth=data["dateOfBirth"];
       mobileNumber=data["mobileNumber"];
       profileImage=data["profileImage"];
@@ -65,6 +72,8 @@ class UserProvider with ChangeNotifier {
     }
   }
 
-
+   logOut(){
+     _user=null;
+   }
 
 }

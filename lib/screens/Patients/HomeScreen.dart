@@ -25,11 +25,16 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     userProvider = Provider.of<UserProvider>(context, listen: false);
     userProvider.userOtherDetails();
-    print(userProvider.user?.displayName);
-    if (userProvider.user?.displayName != null) {
+
+    // if (userProvider.user?.displayName != null) {
       name = userProvider.user?.displayName ?? "";
-      _loadImage(userProvider.profileImage);
-    }
+    print("home get");
+      if(userProvider.profileImage.isNotEmpty){
+
+        _loadImage(userProvider.profileImage);
+      }
+
+
   }
 
   Future<void> _loadImage(String? url) async {
