@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
       ],
       child: const MaterialApp(
         title: 'Life Balance',
-        initialRoute: AppRoutes.login,
+        initialRoute: AppRoutes.splashScreen,
         onGenerateRoute: AppRoutes.generateRoute,
         debugShowCheckedModeBanner: false,
       ),

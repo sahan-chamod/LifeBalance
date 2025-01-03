@@ -29,7 +29,7 @@ import '../screens/Doctors Favorite Screens/Doctor Screen 2.dart';
 import '../screens/Doctors Favorite Screens/Doctor Screen 3.dart';
 import '../screens/Doctors Favorite Screens/Doctor Screen 4.dart';
 import '../screens/Doctors Favorite Screens/Review screen.dart';
-
+import '../screens/Splash Screen/SplashScreen.dart';
 
 class AppRoutes {
   static const String login = '/login';
@@ -62,6 +62,7 @@ class AppRoutes {
   static const String doctorRating = './doctorRating';
   static const String favoriteScreen = './favoriteScreen';
   static const String reviewScreen = './reviewScreen';
+  static const String splashScreen = './splashScreen';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -104,7 +105,7 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => const Schedule());
       case Payments:
         return MaterialPageRoute(builder: (_) => PaymentMethodScreen());
-      case adminHome:
+      case addcards:
         return MaterialPageRoute(builder: (_) => AddCardScreen());
       case chatlist:
         return MaterialPageRoute(builder: (_) => ChatList());
@@ -124,6 +125,8 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => FavoriteScreen());
       case doctorsScreen:
         return MaterialPageRoute(builder: (_) => DoctorsScreen());
+      case splashScreen:
+        return MaterialPageRoute(builder: (_) => Splashscreen());
       default:
         return MaterialPageRoute(builder: (_) => const LoginScreen());
        
