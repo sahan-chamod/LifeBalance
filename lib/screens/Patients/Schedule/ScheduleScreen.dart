@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 
 import '../../../firebase/notification_helper.dart';
 import '../Chat/ChatScreen.dart';
+import '../payment/AddCardScreen.dart';
 
 class Schedule extends StatefulWidget {
   const Schedule({Key? key}) : super(key: key);
@@ -89,10 +90,11 @@ class _ScheduleState extends State<Schedule> {
       await sendScheduleNotification(doctorId, combinedDateTime.toIso8601String());
 
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Appointment created successfully!')),
-      );
-      Navigator.pop(context);
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   const SnackBar(content: Text('Appointment created successfully!')),
+      // );
+      // Navigator.pop(context);
+      Navigator.pushNamed(context, AppRoutes.Payments);
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error: ${e.toString()}')),
