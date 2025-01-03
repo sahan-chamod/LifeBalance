@@ -31,6 +31,7 @@ import '../screens/Doctors Favorite Screens/Doctor Screen 4.dart';
 import '../screens/Doctors Favorite Screens/Review screen.dart';
 import '../screens/Splash Screen/SplashScreen.dart';
 
+
 class AppRoutes {
   static const String login = '/login';
   static const String signUp = '/sign_up';
@@ -63,6 +64,8 @@ class AppRoutes {
   static const String favoriteScreen = './favoriteScreen';
   static const String reviewScreen = './reviewScreen';
   static const String splashScreen = './splashScreen';
+  static const String paymentscreen = './paymentscreen';
+  static const String paymentsuccess = './paymentsuccess'
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -127,6 +130,10 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => DoctorsScreen());
       case splashScreen:
         return MaterialPageRoute(builder: (_) => Splashscreen());
+          case paymentscreen:
+        return MaterialPageRoute(builder: (_) => PaymentScreen());
+          case paymentsuccess:
+        return MaterialPageRoute(builder: (_) => PaymentSuccessScreen());
       default:
         return MaterialPageRoute(builder: (_) => const LoginScreen());
        
