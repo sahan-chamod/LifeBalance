@@ -57,6 +57,7 @@ class _AddFoodAllergiesScreenState extends State<AddFoodAllergiesScreen> {
   @override
   Widget build(BuildContext context) {
      return Scaffold(
+       backgroundColor: AppColors.secondaryColor,
       body: SafeArea(child: Padding(
         padding: EdgeInsets.all(20.0),
         child: Column(

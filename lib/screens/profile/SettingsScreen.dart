@@ -14,6 +14,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.secondaryColor,
       body: SafeArea(
           child:SingleChildScrollView(
           child: Padding(
@@ -56,11 +57,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         title: 'Password Manager',
                         route: AppRoutes.password,
                       ),
-                      CustomListTitle(
-                        icon: Icons.delete,
-                        title: 'Delete Account',
-                        route: AppRoutes.password,
-                      ),
+                      // CustomListTitle(
+                      //   icon: Icons.delete,
+                      //   title: 'Delete Account',
+                      //   route: AppRoutes.password,
+                      // ),
                     ],
                   )
                 ],
