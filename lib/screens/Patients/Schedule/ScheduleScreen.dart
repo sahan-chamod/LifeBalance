@@ -25,7 +25,6 @@ class _ScheduleState extends State<Schedule> {
 
   final List<DateTime> _daysOfMonth = [];
 
-  // Available time slots
   final List<String> timeSlots = [
     "9:00 AM",
     "10:00 AM",
@@ -73,8 +72,8 @@ class _ScheduleState extends State<Schedule> {
     final combinedDateTime = DateFormat('yyyy-MM-dd hh:mm a').parse(
       "${DateFormat('yyyy-MM-dd').format(selectedDate)} $selectedTime",
     );
-    final userId = "currentUserId"; // Replace with actual user ID from auth
-    final doctorId = "Dr. Olivia Turner, M.D."; // Replace with actual doctor ID
+    final userId = "currentUserId";
+    final doctorId = "Dr. Olivia Turner, M.D.";
 
     try {
       await FirebaseFirestore.instance
@@ -123,26 +122,20 @@ class _ScheduleState extends State<Schedule> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Header Section
               _buildHeader(),
 
-              // Date Selection
               _buildDateScrollView(),
 
-              // Available Time Section
               _buildAvailableTime(),
 
               _buildSectionDivider(),
 
-              // Patient Details Section
               _buildPatientDetails(),
 
               _buildSectionDivider(),
 
-              // Problem Description Section
               _buildProblemDescription(),
 
-              // Proceed Button
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 10),
                 child: ElevatedButton(
@@ -155,7 +148,7 @@ class _ScheduleState extends State<Schedule> {
                     minimumSize: const Size(double.infinity, 50),
                   ),
                   child: const Text('Proceed',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold,color: AppColors.secondaryColor)),
                 ),
               ),
             ],
@@ -361,7 +354,7 @@ class _ScheduleState extends State<Schedule> {
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.primaryColor),
           ),
           const SizedBox(height: 10),
-          _buildTextFieldPatient("Full Name", "Jane Doe"),
+          _buildTextFieldPatient("Full Name", "Leo Doe"),
           _buildTextFieldPatient("Age", "30"),
           _buildGenderSelection(),
         ],
@@ -375,7 +368,6 @@ class _ScheduleState extends State<Schedule> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Label positioned on top
           Text(
             label,
             style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.textColor),
@@ -411,8 +403,8 @@ class _ScheduleState extends State<Schedule> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        _buildGenderButton("Male"),
-        _buildGenderButton("Female", isSelected: true),
+        _buildGenderButton("Male",isSelected: true),
+        _buildGenderButton("Female"),
         _buildGenderButton("Other"),
       ],
     );
