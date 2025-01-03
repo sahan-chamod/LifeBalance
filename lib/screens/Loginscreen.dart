@@ -17,6 +17,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final FirebaseService _firebaseService = FirebaseService();
+  late UserProvider userProvider;
   bool _isPasswordVisible = false;
 
   Future<void> _login(BuildContext context) async {
@@ -30,6 +31,9 @@ class _LoginScreenState extends State<LoginScreen> {
         String? userCollection =
         await _firebaseService.getUserCollection(user.email!);
         if (userCollection == 'users') {
+          userProvider = Provider.of<UserProvider>(context, listen: false);
+          userProvider.userOtherDetails();
+
           Navigator.pushReplacementNamed(context, AppRoutes.home);
         } else if (userCollection == 'doctors') {
           Navigator.pushReplacementNamed(context, AppRoutes.doctorHome);
