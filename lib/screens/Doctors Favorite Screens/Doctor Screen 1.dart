@@ -51,7 +51,7 @@ class _DoctorsScreenState extends State<DoctorsScreen> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Sort Options
+          
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: Row(
@@ -85,7 +85,7 @@ class _DoctorsScreenState extends State<DoctorsScreen> {
           ),
           const SizedBox(height: 8),
 
-          // List of Doctor Cards
+          
           Expanded(
             child: SingleChildScrollView(
               child: Column(
@@ -226,14 +226,14 @@ class DoctorCard extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Profile Image
+          
           CircleAvatar(
             radius: 30,
             backgroundImage: AssetImage(imagePath),
           ),
           const SizedBox(width: 12),
 
-          // Doctor Info
+          
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -256,7 +256,7 @@ class DoctorCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
 
-                // Buttons Row
+                
                 Row(
                   children: [
                     ElevatedButton(

@@ -11,7 +11,7 @@ class DoctorInfoScreen extends StatefulWidget {
 }
 
 class _DoctorInfoScreenState extends State<DoctorInfoScreen> {
-  String _sortBy = 'A-Z'; // Default sort option
+  String _sortBy = 'A-Z'; 
   int _currentIndex = 0;
 
   @override
@@ -37,13 +37,13 @@ class _DoctorInfoScreenState extends State<DoctorInfoScreen> {
           IconButton(
             icon: const Icon(Icons.search,color: AppColors.primaryColor),
             onPressed: () {
-              // Handle search action
+              
             },
           ),
           IconButton(
             icon: const Icon(Icons.share,color: AppColors.primaryColor),
             onPressed: () {
-              // Handle share action
+              
             },
           ),
         ],
@@ -54,7 +54,7 @@ class _DoctorInfoScreenState extends State<DoctorInfoScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Sort By Section
+              
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -79,7 +79,7 @@ class _DoctorInfoScreenState extends State<DoctorInfoScreen> {
                 ],
               ),
               const SizedBox(height: 16),
-              // Doctor Card Section
+              
               Card(
                 color: AppColors.secondaryColor,
                 elevation: 4,
@@ -93,14 +93,15 @@ class _DoctorInfoScreenState extends State<DoctorInfoScreen> {
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // Doctor Image
+                          // doctor images
                           CircleAvatar(
                             radius: 40,
                             backgroundImage: AssetImage('assets/images/doctor1.jpg'),
                             backgroundColor: Colors.grey[200], // Placeholder color
                           ),
                           const SizedBox(width: 16),
-                          // Doctor Info
+                         
+                          // doctor info
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -145,7 +146,9 @@ class _DoctorInfoScreenState extends State<DoctorInfoScreen> {
                         ],
                       ),
                       const SizedBox(height: 16),
-                      // Doctor Stats
+                      
+                      
+                      // doctor stats
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
@@ -184,7 +187,7 @@ class _DoctorInfoScreenState extends State<DoctorInfoScreen> {
                           ),
                           ElevatedButton(
                               onPressed: () {
-                                // Handle scheduling action
+                                
                                 Navigator.pushNamed(context, AppRoutes.schedule);
                               },
                               style: ElevatedButton.styleFrom(
@@ -201,7 +204,7 @@ class _DoctorInfoScreenState extends State<DoctorInfoScreen> {
                 ),
               ),
               const SizedBox(height: 16),
-              // Profile Section
+              
               const Text(
                 'Profile',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
@@ -211,7 +214,7 @@ class _DoctorInfoScreenState extends State<DoctorInfoScreen> {
                 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
               ),
               const SizedBox(height: 16),
-              // Career Path Section
+              
               const Text(
                 'Career Path',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
@@ -221,7 +224,7 @@ class _DoctorInfoScreenState extends State<DoctorInfoScreen> {
                 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
               ),
               const SizedBox(height: 16),
-              // Highlights Section
+              
               const Text(
                 'Highlights',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
