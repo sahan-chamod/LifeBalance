@@ -14,12 +14,15 @@ class UpcomingAppointmentsPage extends StatelessWidget {
         .snapshots();
   }
 
-  Future<String> fetchDoctorName(String doctorId) async {
+  Future<String> fetchDoctorName(String doctorNameField) async {
     final firestore = FirebaseFirestore.instance;
-    final doctorDoc = await firestore.collection('doctors').doc(doctorId).get();
-    
-    if (doctorDoc.exists) {
-      return doctorDoc['name'] ?? 'Unknown Doctor'; 
+    final appointmentsSnapshot =
+        await firestore.collection('appointments').get();
+
+    for (final doc in appointmentsSnapshot.docs) {
+      if (doc.data().containsKey('name')) {
+        return doc['name'] ?? 'Unknown Doctor';
+      }
     }
     return 'Unknown Doctor';
   }
@@ -56,11 +59,12 @@ class UpcomingAppointmentsPage extends StatelessWidget {
               itemCount: bookings.length,
               itemBuilder: (context, index) {
                 final booking = bookings[index];
-                final appointmentDate = DateTime.parse(booking['appointmentDate']);
+                final appointmentDate =
+                    DateTime.parse(booking['appointmentDate']);
                 return Card(
                   margin: const EdgeInsets.all(10),
                   child: ListTile(
-                    title: Text('Doctor: $doctorName'), 
+                    title: Text('Doctor: $doctorName'),
                     subtitle: Text('Date: ${appointmentDate.toLocal()}'),
                   ),
                 );

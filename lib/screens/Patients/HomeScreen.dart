@@ -49,7 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: AppColors.secondaryColor,
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: Colors.transparent,
+        backgroundColor: AppColors.secondaryColor,
         leading: Padding(
           padding: EdgeInsets.all(8.0),
           child: CircleAvatar(

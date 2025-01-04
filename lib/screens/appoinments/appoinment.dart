@@ -202,7 +202,6 @@
 //     );
 //   }
 // }
-
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../routes/routes.dart';
@@ -265,7 +264,7 @@ class _AppointmentsState extends State<Appointments>
         controller: _tabController,
         children: const [
           AppointmentList(),
-          Center(child: Text('Upcoming Appointments')),
+          const UpcomingAppointmentsPage(),
         ],
       ),
     );
