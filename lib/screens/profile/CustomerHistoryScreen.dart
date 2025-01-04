@@ -15,6 +15,11 @@ class _SettingsScreenState extends State<CustomerHistoryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.secondaryColor,
+        appBar: PreferredSize(preferredSize: const Size.fromHeight(0),
+          child: AppBar(
+            backgroundColor: AppColors.secondaryColor,
+          ),
+        ),
       body: SafeArea(
           child:SingleChildScrollView(
             child: Padding(
