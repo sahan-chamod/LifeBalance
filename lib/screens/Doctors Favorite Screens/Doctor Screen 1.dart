@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
 
-<<<<<<< Updated upstream
 import '../../routes/routes.dart';
 import '../../utils/app_colors.dart';
-=======
-
-void main() => runApp(const MyApp());
->>>>>>> Stashed changes
 
 
 class DoctorsScreen extends StatefulWidget {
