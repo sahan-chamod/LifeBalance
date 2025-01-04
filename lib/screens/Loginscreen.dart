@@ -29,7 +29,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
       if (user != null) {
         String? userCollection =
-        await _firebaseService.getUserCollection(user.email!);
+            await _firebaseService.getUserCollection(user.email!);
         if (userCollection == 'users') {
           userProvider = Provider.of<UserProvider>(context, listen: false);
           userProvider.userOtherDetails();
@@ -54,8 +54,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-
-
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -67,15 +65,15 @@ class _LoginScreenState extends State<LoginScreen> {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    IconButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      icon: const Icon(
-                        Icons.arrow_back_ios,
-                        color: AppColors.primaryColor,
-                      ),
-                    ),
+                    // IconButton(
+                    //   onPressed: () {
+                    //     Navigator.pop(context);
+                    //   },
+                    //   icon: const Icon(
+                    //     Icons.arrow_back_ios,
+                    //     color: AppColors.primaryColor,
+                    //   ),
+                    // ),
                     Expanded(
                       child: Center(
                         child: Text(
