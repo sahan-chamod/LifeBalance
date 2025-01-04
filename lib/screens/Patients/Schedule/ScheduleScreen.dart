@@ -74,7 +74,8 @@ class _ScheduleState extends State<Schedule> {
       "${DateFormat('yyyy-MM-dd').format(selectedDate)} $selectedTime",
     );
     final userId = "currentUserId";
-    final doctorId = "Dr. Olivia Turner, M.D.";
+    final doctorId = "1";
+    final doctorName = "Dr. Olivia Turner, M.D.";
 
     try {
       await FirebaseFirestore.instance
@@ -86,6 +87,7 @@ class _ScheduleState extends State<Schedule> {
         'doctorId': doctorId,
         'userId': userId,
         'status': 'upcoming',
+        'name':doctorName,
       });
       await sendScheduleNotification(doctorId, combinedDateTime.toIso8601String());
 
