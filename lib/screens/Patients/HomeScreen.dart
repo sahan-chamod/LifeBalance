@@ -27,14 +27,11 @@ class _HomeScreenState extends State<HomeScreen> {
     userProvider.userOtherDetails();
 
     // if (userProvider.user?.displayName != null) {
-      name = userProvider.user?.displayName ?? "";
+    name = userProvider.user?.displayName ?? "";
     print("home get");
-      if(userProvider.profileImage.isNotEmpty){
-
-        _loadImage(userProvider.profileImage);
-      }
-
-
+    if (userProvider.profileImage.isNotEmpty) {
+      _loadImage(userProvider.profileImage);
+    }
   }
 
   Future<void> _loadImage(String? url) async {
@@ -42,7 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final imageFile = await fetchImage(filePath);
     print(imageFile);
     setState(() {
-      file=imageFile;
+      file = imageFile;
     });
   }
 
@@ -53,13 +50,13 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,
-        leading:  Padding(
+        leading: Padding(
           padding: EdgeInsets.all(8.0),
           child: CircleAvatar(
-              backgroundImage: file != null ? FileImage(file!) : null,
+            backgroundImage: file != null ? FileImage(file!) : null,
           ),
         ),
-        title:  Column(
+        title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text("Hi, Welcome Back",
@@ -68,17 +65,18 @@ class _HomeScreenState extends State<HomeScreen> {
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
           ],
         ),
-        actions:  [
+        actions: [
           // Icon(Icons.notifications_none, color: AppColors.textColor, size: 28),
           GestureDetector(
             onTap: () {
               // Navigate to the notification page when the icon is tapped
               Navigator.pushNamed(
-                context,AppRoutes.notifications,
+                context, AppRoutes.notifications,
                 // MaterialPageRoute(builder: (context) => NotificationPage()),
               );
             },
-            child: Icon(Icons.notifications_none, color: AppColors.textColor, size: 28),
+            child: Icon(Icons.notifications_none,
+                color: AppColors.textColor, size: 28),
           ),
           SizedBox(width: 12),
           Icon(Icons.settings, color: AppColors.textColor, size: 28),
@@ -93,17 +91,24 @@ class _HomeScreenState extends State<HomeScreen> {
           Expanded(
             child: ListView(
               children: [
-                _buildDoctorCard(context,'assets/images/doctor1.jpg',
-                    "Dr. Olivia Turner, M.D.", "Dermato-Endocrinology", 5.0,0),
-                _buildDoctorCard(context,'assets/images/doctor2.jpg',
-                    "Dr. Alexander Bennett, Ph.D.", "Dermato-Granulese", 4.5,1),
-                _buildDoctorCard(context,
+                _buildDoctorCard(context, 'assets/images/doctor1.jpg',
+                    "Dr. Olivia Turner, M.D.", "Dermato-Endocrinology", 5.0, 0),
+                _buildDoctorCard(
+                    context,
+                    'assets/images/doctor2.jpg',
+                    "Dr. Alexander Bennett, Ph.D.",
+                    "Dermato-Granulese",
+                    4.5,
+                    1),
+                _buildDoctorCard(
+                    context,
                     'assets/images/doctor3.jpg',
                     "Dr. Sophia Martinez, Ph.D.",
                     "Cosmetic Bioengineering",
-                    5.0,2),
-                _buildDoctorCard(context,'assets/images/doctor4.jpg',
-                    "Dr. Michael Davidson, M.D.", "Nano-Dermatology", 4.8,3),
+                    5.0,
+                    2),
+                _buildDoctorCard(context, 'assets/images/doctor4.jpg',
+                    "Dr. Michael Davidson, M.D.", "Nano-Dermatology", 4.8, 3),
               ],
             ),
           ),
@@ -146,18 +151,16 @@ class _HomeScreenState extends State<HomeScreen> {
         setState(() {
           _currentIndex = index;
         });
-        if(index==1){
+        if (index == 1) {
           Navigator.pushNamed(context, AppRoutes.chatlist);
         }
-        if(index==2){
+        if (index == 2) {
           Navigator.pushNamed(context, AppRoutes.profile);
         }
-        if(index==3){
+        if (index == 3) {
           Navigator.pushNamed(context, AppRoutes.appoinments);
         }
         print(index);
-
-
       },
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -195,9 +198,9 @@ Widget _buildTopSection(BuildContext context) {
     padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
     child: Row(
       children: [
-        _buildTopButton(context, Icons.favorite_border, "Doctors",0),
+        _buildTopButton(context, Icons.favorite_border, "Doctors", 0),
         const SizedBox(width: 12),
-        _buildTopButton(context, Icons.star_border, "Favorite",1),
+        _buildTopButton(context, Icons.star_border, "Favorite", 1),
         const SizedBox(width: 12),
         Expanded(
           child: TextField(
@@ -218,7 +221,8 @@ Widget _buildTopSection(BuildContext context) {
   );
 }
 
-Widget _buildTopButton(BuildContext context, IconData icon, String label, int index) {
+Widget _buildTopButton(
+    BuildContext context, IconData icon, String label, int index) {
   return GestureDetector(
     onTap: () {
       if (index == 0) {
@@ -243,7 +247,6 @@ Widget _buildTopButton(BuildContext context, IconData icon, String label, int in
     ),
   );
 }
-
 
 Widget _buildDateScrollView() {
   return SizedBox(
@@ -299,44 +302,42 @@ Widget _buildTodaySection() {
   );
 }
 
-Widget _buildDoctorCard(BuildContext context,
-    String imagePath, String name, String specialty, double rating,int index) {
+Widget _buildDoctorCard(BuildContext context, String imagePath, String name,
+    String specialty, double rating, int index) {
   return GestureDetector(
-      onTap: () {
-        if (index == 0) {
-          Navigator.pushNamed(context, AppRoutes.doctorInfo);
-        } else if (index == 1) {
-          // Navigator.pushNamed(context, AppRoutes.favoriteScreen);
-        } else if(index ==2){
-
-        }
-      },
-  child: Card(
-    color: AppColors.secondaryColor,
-    margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
-    elevation: 3,
-    child: ListTile(
-      contentPadding: const EdgeInsets.all(12.0),
-      leading: CircleAvatar(
-        radius: 30,
-        backgroundImage: AssetImage(imagePath),
-      ),
-      title: Text(name,
-          style: const TextStyle(
-              fontWeight: FontWeight.bold, color: Colors.black)),
-      subtitle:
-          Text(specialty, style: const TextStyle(color: AppColors.textColor)),
-      trailing: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Icon(Icons.star, color: Colors.amber, size: 20),
-          Text("$rating",
-              style: const TextStyle(
-                  fontWeight: FontWeight.bold, color: Colors.black)),
-        ],
+    onTap: () {
+      if (index == 0) {
+        Navigator.pushNamed(context, AppRoutes.doctorInfo);
+      } else if (index == 1) {
+        // Navigator.pushNamed(context, AppRoutes.favoriteScreen);
+      } else if (index == 2) {}
+    },
+    child: Card(
+      color: AppColors.secondaryColor,
+      margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+      elevation: 3,
+      child: ListTile(
+        contentPadding: const EdgeInsets.all(12.0),
+        leading: CircleAvatar(
+          radius: 30,
+          backgroundImage: AssetImage(imagePath),
+        ),
+        title: Text(name,
+            style: const TextStyle(
+                fontWeight: FontWeight.bold, color: Colors.black)),
+        subtitle:
+            Text(specialty, style: const TextStyle(color: AppColors.textColor)),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.star, color: Colors.amber, size: 20),
+            Text("$rating",
+                style: const TextStyle(
+                    fontWeight: FontWeight.bold, color: Colors.black)),
+          ],
+        ),
       ),
     ),
-  ),
-        );
+  );
 }

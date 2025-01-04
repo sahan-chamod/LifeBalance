@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import '../../routes/routes.dart';
 import '../../utils/app_colors.dart';
 
-
 class ReviewScreen extends StatefulWidget {
   const ReviewScreen({Key? key}) : super(key: key);
 
@@ -18,29 +17,31 @@ class _ReviewScreenState extends State<ReviewScreen> {
   final TextEditingController _reviewController = TextEditingController();
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  Future<void> _submitReview(String doctorName, int rating, String reviewText) async {
-      String reviewId = DateTime.now().millisecondsSinceEpoch.toString();
+  Future<void> _submitReview(
+      String doctorName, int rating, String reviewText) async {
+    String reviewId = DateTime.now().millisecondsSinceEpoch.toString();
 
-      await _firestore
-          .collection('reviews')
-          .doc(doctorName)
-          .collection('reviews')
-          .doc(reviewId)
-          .set({
-        'rating': rating,
-        'review': reviewText,
-        'doctor_name': doctorName,
-        'timestamp': FieldValue.serverTimestamp(),
-      });
-      setState(() {
-        rating = 0;
-      });
-      _reviewController.clear();
-      // Show success message
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Review submitted successfully!')),
-      );
+    await _firestore
+        .collection('reviews')
+        .doc(doctorName)
+        .collection('reviews')
+        .doc(reviewId)
+        .set({
+      'rating': rating,
+      'review': reviewText,
+      'doctor_name': doctorName,
+      'timestamp': FieldValue.serverTimestamp(),
+    });
+    setState(() {
+      rating = 0;
+    });
+    _reviewController.clear();
+    // Show success message
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Review submitted successfully!')),
+    );
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,7 +57,10 @@ class _ReviewScreenState extends State<ReviewScreen> {
         ),
         title: Text(
           'Review',
-          style: TextStyle(color: AppColors.primaryColor, fontSize: 20, fontWeight: FontWeight.bold),
+          style: TextStyle(
+              color: AppColors.primaryColor,
+              fontSize: 20,
+              fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
       ),
@@ -73,12 +77,16 @@ class _ReviewScreenState extends State<ReviewScreen> {
             SizedBox(height: 20),
             CircleAvatar(
               radius: 50,
-              backgroundImage: AssetImage('assets/images/doctor1.jpg'), // Replace with your image asset
+              backgroundImage: AssetImage(
+                  'assets/images/doctor1.jpg'), // Replace with your image asset
             ),
             SizedBox(height: 10),
             Text(
               'Dr. Olivia Turner, M.D.',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
+              style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black),
             ),
             Text(
               'Dermato-Endocrinology',
@@ -127,7 +135,8 @@ class _ReviewScreenState extends State<ReviewScreen> {
                   );
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Please provide a rating and review.')),
+                    SnackBar(
+                        content: Text('Please provide a rating and review.')),
                   );
                 }
               },
@@ -140,7 +149,10 @@ class _ReviewScreenState extends State<ReviewScreen> {
               ),
               child: Text(
                 'Add Review',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+                style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white),
               ),
             ),
           ],
@@ -149,6 +161,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
       bottomNavigationBar: _buildBottomNavigationBar(context),
     );
   }
+
   Widget _buildBottomNavigationBar(context) {
     return Container(
       margin: const EdgeInsets.all(12),
@@ -168,28 +181,29 @@ class _ReviewScreenState extends State<ReviewScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _buildNavBarItem(context,Icons.home, 0),
-          _buildNavBarItem(context,Icons.chat_bubble_outline, 1),
-          _buildNavBarItem(context,Icons.person_outline, 2),
-          _buildNavBarItem(context,Icons.calendar_today_outlined, 3),
+          _buildNavBarItem(context, Icons.home, 0),
+          _buildNavBarItem(context, Icons.chat_bubble_outline, 1),
+          _buildNavBarItem(context, Icons.person_outline, 2),
+          _buildNavBarItem(context, Icons.calendar_today_outlined, 3),
         ],
       ),
     );
   }
 
-  Widget _buildNavBarItem(BuildContext context, IconData icon, int index, {bool hasNotification = false}) {
+  Widget _buildNavBarItem(BuildContext context, IconData icon, int index,
+      {bool hasNotification = false}) {
     return GestureDetector(
       onTap: () {
-        if(index==0){
+        if (index == 0) {
           Navigator.pushNamed(context, AppRoutes.home);
         }
-        if(index==1){
+        if (index == 1) {
           Navigator.pushNamed(context, AppRoutes.chatlist);
         }
-        if(index==2){
+        if (index == 2) {
           Navigator.pushNamed(context, AppRoutes.profile);
         }
-        if(index==3){
+        if (index == 3) {
           Navigator.pushNamed(context, AppRoutes.appoinments);
         }
       },
