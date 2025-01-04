@@ -63,7 +63,7 @@ class AppRoutes {
   static const String doctorInfo = '/doctorInfo';
   static const String doctorRating = './doctorRating';
   static const String favoriteScreen = './favoriteScreen';
-  static const String reviewScreen = '/reviewScreen';
+  static const String reviewScreen = './reviewScreen';
   static const String splashScreen = '/splashScreen';
   static const String paymentscreen = '/paymentscreen';
   static const String paymentsuccess = '/paymentsuccess';

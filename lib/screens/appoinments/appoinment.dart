@@ -202,33 +202,21 @@
 //     );
 //   }
 // }
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../routes/routes.dart';
 import '../../utils/app_colors.dart';
+import 'upcoming_appointments.dart';
 
-class Appointments extends StatelessWidget {
+class Appointments extends StatefulWidget {
   const Appointments({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Appointment UI',
-      theme: ThemeData(primarySwatch: Colors.blue),
-      home: const AppointmentScreen(),
-      debugShowCheckedModeBanner: false,
-    );
-  }
+  _AppointmentsState createState() => _AppointmentsState();
 }
 
-class AppointmentScreen extends StatefulWidget {
-  const AppointmentScreen({Key? key}) : super(key: key);
-
-  @override
-  State<AppointmentScreen> createState() => _AppointmentScreenState();
-}
-
-class _AppointmentScreenState extends State<AppointmentScreen>
+class _AppointmentsState extends State<Appointments>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
@@ -375,10 +363,9 @@ class AppointmentList extends StatelessWidget {
             child: Row(
               children: [
                 CircleAvatar(
-                  radius: 30,
-                  backgroundImage:
-                      const NetworkImage('https://via.placeholder.com/150'),
-                ),
+                    radius: 30,
+                    backgroundImage:
+                        const AssetImage('assets/images/doctor1.jpg')),
                 const SizedBox(width: 10),
                 Expanded(
                   child: Column(
@@ -414,8 +401,9 @@ class AppointmentList extends StatelessWidget {
                       ),
                     ),
                     ElevatedButton(
-                      onPressed: () =>
-                          Navigator.pushNamed(context, AppRoutes.reviewScreen),
+                      onPressed: () {
+                        Navigator.pushNamed(context, AppRoutes.reviewScreen);
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.orange,
                       ),
