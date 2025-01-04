@@ -74,7 +74,7 @@ class _SplashscreenState extends State<Splashscreen>
                         color: AppColors.secondaryColor,
                         fontSize: 50,
                         fontFamily: 'League Spartan',
-                        fontWeight: FontWeight.w100,
+                        fontWeight: FontWeight.w300,
                       ),
                     ),
                     Text(
@@ -84,7 +84,7 @@ class _SplashscreenState extends State<Splashscreen>
                         color: AppColors.secondaryColor,
                         fontSize: 50,
                         fontFamily: 'League Spartan',
-                        fontWeight: FontWeight.w100,
+                        fontWeight: FontWeight.w300,
                       ),
                     ),
                     SizedBox(height: 20),
