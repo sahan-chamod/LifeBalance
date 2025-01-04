@@ -79,7 +79,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 color: AppColors.textColor, size: 28),
           ),
           SizedBox(width: 12),
-          Icon(Icons.settings, color: AppColors.textColor, size: 28),
+          IconButton(
+            icon: Icon(Icons.settings, color: AppColors.textColor, size: 28),
+            onPressed: () {
+              // Navigate to SettingsScreen
+              Navigator.pushNamed(context, AppRoutes.userSettings);
+            },
+          ),
           SizedBox(width: 12),
         ],
       ),
