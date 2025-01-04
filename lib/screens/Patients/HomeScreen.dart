@@ -49,7 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: AppColors.secondaryColor,
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: Colors.transparent,
+        backgroundColor: AppColors.secondaryColor,
         leading: Padding(
           padding: EdgeInsets.all(8.0),
           child: CircleAvatar(
@@ -79,7 +79,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 color: AppColors.textColor, size: 28),
           ),
           SizedBox(width: 12),
-          Icon(Icons.settings, color: AppColors.textColor, size: 28),
+          IconButton(
+            icon: Icon(Icons.settings, color: AppColors.textColor, size: 28),
+            onPressed: () {
+              // Navigate to SettingsScreen
+              Navigator.pushNamed(context, AppRoutes.userSettings);
+            },
+          ),
           SizedBox(width: 12),
         ],
       ),
