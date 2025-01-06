@@ -10,8 +10,10 @@ import '../Chat/ChatScreen.dart';
 import '../payment/AddCardScreen.dart';
 
 class Schedule extends StatefulWidget {
-  const Schedule({Key? key}) : super(key: key);
+  // const Schedule({Key? key}) : super(key: key);
+  final String? doctorName;  // Declare the parameter
 
+  const Schedule({Key? key, this.doctorName }) : super(key: key);
   @override
   State<Schedule> createState() => _ScheduleState();
 }
@@ -75,7 +77,7 @@ class _ScheduleState extends State<Schedule> {
     );
     final userId = "currentUserId";
     final doctorId = "1";
-    final doctorName = "Dr. Olivia Turner, M.D.";
+    final doctorName = widget.doctorName ?? "Dr. Olivia Turner, M.D.";
 
     try {
       await FirebaseFirestore.instance
@@ -87,7 +89,7 @@ class _ScheduleState extends State<Schedule> {
         'doctorId': doctorId,
         'userId': userId,
         'status': 'upcoming',
-        'name':doctorName,
+        'name': doctorName,
       });
       await sendScheduleNotification(doctorId, combinedDateTime.toIso8601String());
 
@@ -266,8 +268,9 @@ class _ScheduleState extends State<Schedule> {
               color: AppColors.primaryColor,
               borderRadius: BorderRadius.circular(20),
             ),
-            child: const Text(
-              "Dr. Olivia Turner, M.D.",
+            child: Text(
+              // "Dr. Olivia Turner, M.D.",
+              widget.doctorName ?? "Dr. Olivia Turner, M.D.",
               style: TextStyle(
                 fontSize: 15,
                 fontWeight: FontWeight.bold,
