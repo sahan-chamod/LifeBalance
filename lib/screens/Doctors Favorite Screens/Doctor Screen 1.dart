@@ -1,8 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
+import '../../firebase/favorite_helper.dart';
 import '../../routes/routes.dart';
 import '../../utils/app_colors.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../Patients/Schedule/ScheduleScreen.dart';
 
 class DoctorsScreen extends StatefulWidget {
   const DoctorsScreen({Key? key}) : super(key: key);
@@ -13,6 +16,10 @@ class DoctorsScreen extends StatefulWidget {
 
 class _DoctorsScreenState extends State<DoctorsScreen> {
   int _currentIndex = 0;
+  final FavoriteHelper _favoriteHelper = FavoriteHelper();
+
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  String? userId = FirebaseAuth.instance.currentUser?.uid;
 
   @override
   Widget build(BuildContext context) {
@@ -38,8 +45,7 @@ class _DoctorsScreenState extends State<DoctorsScreen> {
         ),
         actions: [
           IconButton(
-            icon: const
-            Icon(Icons.search, color: Colors.black),
+            icon: const Icon(Icons.search, color: Colors.black),
             onPressed: () {},
           ),
           IconButton(
@@ -51,7 +57,6 @@ class _DoctorsScreenState extends State<DoctorsScreen> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: Row(
@@ -77,38 +82,50 @@ class _DoctorsScreenState extends State<DoctorsScreen> {
                   ),
                 ),
                 const Spacer(),
-                IconButton(onPressed: (){
-                  Navigator.pushNamed(context, AppRoutes.doctorRating);
-                },icon: Icon(Icons.star_border, color: Colors.grey))
+                IconButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, AppRoutes.doctorRating);
+                  },
+                  icon: const Icon(Icons.star_border, color: Colors.grey),
+                ),
               ],
             ),
           ),
           const SizedBox(height: 8),
-
-          
           Expanded(
             child: SingleChildScrollView(
               child: Column(
-                children: const [
+                children: [
                   DoctorCard(
                     name: 'Dr. Alexander Bennett, Ph.D.',
                     specialty: 'Dermato-Genetics',
                     imagePath: 'assets/images/doctor3.jpg',
+                    favoriteHelper: _favoriteHelper,
+                    userId:userId!,
                   ),
                   DoctorCard(
                     name: 'Dr. Michael Davidson, M.D.',
                     specialty: 'Solar Dermatology',
                     imagePath: 'assets/images/doctor2.jpg',
+                    favoriteHelper: _favoriteHelper,
+                    userId:userId!,
+
                   ),
                   DoctorCard(
                     name: 'Dr. Olivia Turner, M.D.',
                     specialty: 'Dermato-Endocrinology',
                     imagePath: 'assets/images/doctor1.jpg',
+                    favoriteHelper: _favoriteHelper,
+                    userId:userId!,
+
                   ),
                   DoctorCard(
                     name: 'Dr. Sophia Martinez, Ph.D.',
                     specialty: 'Cosmetic Bioengineering',
                     imagePath: 'assets/images/doctor4.jpg',
+                    favoriteHelper: _favoriteHelper,
+                    userId:userId!,
+
                   ),
                 ],
               ),
@@ -119,6 +136,7 @@ class _DoctorsScreenState extends State<DoctorsScreen> {
       bottomNavigationBar: _buildBottomNavigationBar(context),
     );
   }
+
   Widget _buildBottomNavigationBar(context) {
     return Container(
       margin: const EdgeInsets.all(12),
@@ -138,73 +156,60 @@ class _DoctorsScreenState extends State<DoctorsScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _buildNavBarItem(context,Icons.home, 0),
-          _buildNavBarItem(context,Icons.chat_bubble_outline, 1),
-          _buildNavBarItem(context,Icons.person_outline, 2),
-          _buildNavBarItem(context,Icons.calendar_today_outlined, 3),
+          _buildNavBarItem(context, Icons.home, 0),
+          _buildNavBarItem(context, Icons.chat_bubble_outline, 1),
+          _buildNavBarItem(context, Icons.person_outline, 2),
+          _buildNavBarItem(context, Icons.calendar_today_outlined, 3),
         ],
       ),
     );
   }
 
-  Widget _buildNavBarItem(BuildContext context, IconData icon, int index, {bool hasNotification = false}) {
+  Widget _buildNavBarItem(BuildContext context, IconData icon, int index) {
     return GestureDetector(
       onTap: () {
-        if(index==0){
+        if (index == 0) {
           Navigator.pushNamed(context, AppRoutes.home);
         }
-        if(index==1){
+        if (index == 1) {
           Navigator.pushNamed(context, AppRoutes.chatlist);
         }
-        if(index==2){
+        if (index == 2) {
           Navigator.pushNamed(context, AppRoutes.profile);
         }
-        if(index==3){
+        if (index == 3) {
           Navigator.pushNamed(context, AppRoutes.appoinments);
         }
       },
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Stack(
-            children: [
-              Icon(
-                icon,
-                size: 30,
-                color: _currentIndex == index ? Colors.white : Colors.white70,
-              ),
-              if (hasNotification)
-                Positioned(
-                  top: 0,
-                  right: 0,
-                  child: Container(
-                    width: 8,
-                    height: 8,
-                    decoration: const BoxDecoration(
-                      color: Colors.red,
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-                ),
-            ],
+          Icon(
+            icon,
+            size: 30,
+            color: _currentIndex == index ? Colors.white : Colors.white70,
           ),
         ],
       ),
     );
   }
 }
-
-
 class DoctorCard extends StatelessWidget {
   final String name;
   final String specialty;
   final String imagePath;
+  final FavoriteHelper favoriteHelper;
+  final String userId;
+
 
   const DoctorCard({
     Key? key,
     required this.name,
     required this.specialty,
     required this.imagePath,
+    required this.favoriteHelper,
+    required this.userId,
+
   }) : super(key: key);
 
   @override
@@ -226,14 +231,11 @@ class DoctorCard extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          
           CircleAvatar(
             radius: 30,
             backgroundImage: AssetImage(imagePath),
           ),
           const SizedBox(width: 12),
-
-          
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -255,8 +257,6 @@ class DoctorCard extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 8),
-
-                
                 Row(
                   children: [
                     ElevatedButton(
@@ -265,8 +265,7 @@ class DoctorCard extends StatelessWidget {
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF2260FF),
-                        padding:
-                            const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
@@ -277,11 +276,26 @@ class DoctorCard extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 8),
-                    const Icon(Icons.calendar_today_outlined, color: Colors.grey),
+                    IconButton(
+                      icon: const Icon(Icons.favorite_border, color: Colors.grey),
+                      onPressed: () {
+                        favoriteHelper.saveDoctor(userId:userId,name: name,designation: 'Professional Doctor',specialization: specialty,image: imagePath);
+                      },
+                    ),
                     const SizedBox(width: 8),
-                    const Icon(Icons.info_outline, color: Colors.grey),
-                    const SizedBox(width: 8),
-                    const Icon(Icons.favorite_border, color: Colors.grey),
+                    IconButton(
+                      icon: const Icon(Icons.calendar_month_outlined, color: Colors.grey),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Schedule(
+                              doctorName: name,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
                   ],
                 ),
               ],
