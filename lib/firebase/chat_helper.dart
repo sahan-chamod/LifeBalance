@@ -25,7 +25,7 @@ class ChatHelper {
       for (final chat in userChats.children) {
         final participants = chat.child('participants').value as Map<dynamic, dynamic>;
 
-        if (participants.containsKey(doctorId) || participants.containsKey(userId)) {
+        if (participants.containsKey(doctorId) && participants.containsKey(userId)) {
           return chat.key;
         }
       }
