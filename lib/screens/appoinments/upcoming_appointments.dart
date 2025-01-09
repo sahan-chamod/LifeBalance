@@ -8,77 +8,71 @@ class UpcomingAppointmentsPage extends StatelessWidget {
     final firestore = FirebaseFirestore.instance;
     return firestore
         .collection('appointments')
-        .where(
-          'appointmentDate',
-          isGreaterThanOrEqualTo: DateTime.now().toIso8601String(),
-        )
-        .orderBy('appointmentDate')
+        .where('appointmentDate',
+            isGreaterThanOrEqualTo: DateTime.now().toIso8601String())
+        .orderBy('appointmentDate', descending: false)
         .snapshots();
   }
 
-  Future<String> fetchDoctorName(String doctorId) async {
-    try {
-      final doctorSnapshot =
-          await FirebaseFirestore.instance.collection('doctors').doc(doctorId).get();
-      return doctorSnapshot.data()?['name'] ?? 'Unknown Doctor';
-    } catch (e) {
-      return 'Unknown Doctor';
+  Future<String> fetchDoctorName(String doctorNameField) async {
+    final firestore = FirebaseFirestore.instance;
+    final appointmentsSnapshot =
+        await firestore.collection('appointments').get();
+
+    for (final doc in appointmentsSnapshot.docs) {
+      if (doc.data().containsKey('name')) {
+        return doc['name'] ?? 'Unknown Doctor';
+      }
     }
+    return 'Unknown Doctor';
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Upcoming Appointments'),
-      ),
-      body: StreamBuilder<QuerySnapshot>(
-        stream: fetchUpcomingBookings(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
+    return StreamBuilder<QuerySnapshot>(
+      stream: fetchUpcomingBookings(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
 
-          if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-            return const Center(child: Text('No upcoming bookings found.'));
-          }
+        if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+          return const Center(child: Text('No upcoming bookings found.'));
+        }
 
-          final bookings = snapshot.data!.docs;
+        final bookings = snapshot.data!.docs;
 
-          return ListView.builder(
-            itemCount: bookings.length,
-            itemBuilder: (context, index) {
-              final booking = bookings[index];
-              final appointmentDate =
-                  DateTime.parse(booking['appointmentDate']);
-              final doctorId = booking['doctorId'];
+        return FutureBuilder<String>(
+          future: fetchDoctorName(bookings[0]['doctorId']),
+          builder: (context, doctorSnapshot) {
+            if (doctorSnapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
 
-              return FutureBuilder<String>(
-                future: fetchDoctorName(doctorId),
-                builder: (context, doctorSnapshot) {
-                  if (doctorSnapshot.connectionState == ConnectionState.waiting) {
-                    return const ListTile(
-                      title: Text('Loading doctor name...'),
-                      subtitle: Text('Fetching details...'),
-                    );
-                  }
+            if (doctorSnapshot.hasError) {
+              return const Center(child: Text('Error fetching doctor name.'));
+            }
 
-                  final doctorName = doctorSnapshot.data ?? 'Unknown Doctor';
+            final doctorName = doctorSnapshot.data ?? 'Unknown Doctor';
 
-                  return Card(
-                    margin: const EdgeInsets.all(10),
-                    child: ListTile(
-                      title: Text('Doctor: $doctorName'),
-                      subtitle: Text(
-                          'Date: ${appointmentDate.toLocal().toString().split(' ')[0]}'),
-                    ),
-                  );
-                },
-              );
-            },
-          );
-        },
-      ),
+            return ListView.builder(
+              itemCount: bookings.length,
+              itemBuilder: (context, index) {
+                final booking = bookings[index];
+                final appointmentDate =
+                    DateTime.parse(booking['appointmentDate']);
+                return Card(
+                  margin: const EdgeInsets.all(10),
+                  child: ListTile(
+                    title: Text('Doctor: $doctorName'),
+                    subtitle: Text('Date: ${appointmentDate.toLocal()}'),
+                  ),
+                );
+              },
+            );
+          },
+        );
+      },
     );
   }
 }
