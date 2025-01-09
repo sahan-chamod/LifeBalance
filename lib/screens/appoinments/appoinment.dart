@@ -262,10 +262,11 @@ class _AppointmentsState extends State<Appointments>
       ),
       body: TabBarView(
         controller: _tabController,
-        children: const [
+       children: [
           AppointmentList(),
-          const UpcomingAppointmentsPage(),
+          UpcomingAppointmentsPage(),
         ],
+       
       ),
     );
   }
