@@ -85,4 +85,9 @@ class ChatHelper {
 
     await _chatsRef.child(chatId).child('messages').push().set(message);
   }
+
+  Future<void> deleteMessage(String chatId, String messageId) async {
+      final messageRef = _chatsRef.child(chatId).child('messages').child(messageId);
+      await messageRef.remove();
+  }
 }
