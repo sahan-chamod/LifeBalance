@@ -82,8 +82,6 @@ class _ScheduleState extends State<Schedule> {
     try {
       await FirebaseFirestore.instance
           .collection('appointments')
-          // .doc(userId)
-          // .collection('userAppointments')
           .add({
         'appointmentDate': combinedDateTime.toIso8601String(),
         'doctorId': doctorId,
@@ -93,11 +91,6 @@ class _ScheduleState extends State<Schedule> {
       });
       await sendScheduleNotification(doctorId, combinedDateTime.toIso8601String());
 
-
-      // ScaffoldMessenger.of(context).showSnackBar(
-      //   const SnackBar(content: Text('Appointment created successfully!')),
-      // );
-      // Navigator.pop(context);
       Navigator.pushNamed(context, AppRoutes.Payments);
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
